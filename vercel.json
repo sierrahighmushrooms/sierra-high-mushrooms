@@ -1,0 +1,12 @@
+{
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "remix",
+  "outputDirectory": "dist",
+  "env": {
+    "VITE_SHOPIFY_STOREFRONT_API_KEY": "@shopify_storefront_api_key",
+    "VITE_SHOPIFY_STOREFRONT_API_URL": "@shopify_storefront_api_url",
+    "VITE_SESSION_SECRET": "@session_secret"
+  }
+}
