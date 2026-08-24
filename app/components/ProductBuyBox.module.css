@@ -191,6 +191,26 @@
   font-size: 16px;
   font-weight: 600;
   letter-spacing: 0.04em;
+  font-family: var(--font-sans);
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: var(--color-forest-deep);
+  color: var(--color-bg);
+  transition: var(--transition-standard);
+}
+
+.addToCartButton:hover:not(:disabled) {
+  background-color: var(--color-forest);
+}
+
+.addToCartButton:active:not(:disabled) {
+  background-color: var(--color-sage);
+}
+
+.addToCartButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .trustSection {
