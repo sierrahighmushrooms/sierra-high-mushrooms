@@ -1,13 +1,15 @@
-import {redirect, useLoaderData} from 'react-router';
+import {redirect, useLoaderData, useState} from 'react-router';
 import type {Route} from './+types/collections.$handle';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
+import {CollectionHeader} from '~/components/CollectionHeader';
+import {CollectionSEOSection} from '~/components/CollectionSEOSection';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = ({data}) => {
-  return [{title: `Hydrogen | ${data?.collection.title ?? ''} Collection`}];
+  return [{title: `${data?.collection.title ?? 'Collection'} | Sierra High Mushrooms`}];
 };
 
 export async function loader(args: Route.LoaderArgs) {
@@ -28,7 +30,7 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 12,
   });
 
   if (!handle) {
@@ -38,7 +40,6 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   const [{collection}] = await Promise.all([
     storefront.query(COLLECTION_QUERY, {
       variables: {handle, ...paginationVariables},
-      // Add other queries here, so that they are loaded in parallel
     }),
   ]);
 
@@ -48,7 +49,6 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
     });
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, {handle, data: collection});
 
   return {
@@ -56,34 +56,116 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
 function loadDeferredData({context}: Route.LoaderArgs) {
   return {};
 }
 
+// Content mapping for different collection types
+const COLLECTION_CONTENT: Record<
+  string,
+  {
+    contentParagraphs: string[];
+    faqs: Array<{question: string; answer: string}>;
+  }
+> = {
+  default: {
+    contentParagraphs: [
+      'Our carefully curated selection of growing supplies is designed to support your cultivation journey, whether you are just starting out or refining your technique.',
+      'Each product is sourced for quality and reliability, backed by our commitment to help you succeed with expert guidance and premium materials.',
+    ],
+    faqs: [
+      {
+        question: 'How do I choose between agar premix and pre-poured plates?',
+        answer:
+          'Premix offers flexibility and is ideal if you have your own sterilization equipment. Pre-poured plates are ready to use immediately and reduce contamination risk for beginners.',
+      },
+      {
+        question: 'Do I need a flow hood?',
+        answer:
+          'A flow hood significantly reduces contamination risk and is recommended as you scale, but many growers start successfully with proper technique and basic sterile practices.',
+      },
+      {
+        question: 'Is substrate ready to inoculate?',
+        answer:
+          'Our pre-sterilized substrate is ready to use right out of the bag. Simply inoculate with your prepared culture and follow the included instructions.',
+      },
+      {
+        question: 'What species does this work for?',
+        answer:
+          'Our supplies are versatile and compatible with most common gourmet and medicinal species. Check product descriptions for specific recommendations.',
+      },
+      {
+        question: 'How are orders shipped?',
+        answer:
+          'All orders are carefully packed to order in Sparks, Nevada and shipped via USPS. Most orders arrive within 3-5 business days.',
+      },
+    ],
+  },
+};
+
 export default function Collection() {
   const {collection} = useLoaderData<typeof loader>();
+  const [activeFilter, setActiveFilter] = useState('all');
+
+  const contentData = COLLECTION_CONTENT.default;
+
+  // Filter products based on active filter (client-side)
+  const filterProductsByTag = (
+    products: ProductItemFragment[],
+    filter: string,
+  ): ProductItemFragment[] => {
+    if (filter === 'all') return products;
+
+    const filterMap: Record<string, string[]> = {
+      agar: ['agar', 'culture'],
+      substrate: ['substrate'],
+      beginner: ['beginner', 'starter'],
+    };
+
+    const tags = filterMap[filter] || [];
+    return products.filter(
+      (product) =>
+        tags.some((tag) =>
+          (product.tags || []).some((t) =>
+            t.toLowerCase().includes(tag.toLowerCase()),
+          ),
+        ) || tags.length === 0,
+    );
+  };
 
   return (
-    <div className="collection">
-      <h1>{collection.title}</h1>
-      <p className="collection-description">{collection.description}</p>
-      <PaginatedResourceSection<ProductItemFragment>
-        connection={collection.products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
+    <>
+      <CollectionHeader
+        title={collection.title}
+        description={collection.description}
+        activeFilter={activeFilter}
+        onFilterChange={setActiveFilter}
+        productCount={collection.products.nodes.length}
+      />
+
+      <div className="wrap">
+        <div className="section-padding">
+          <PaginatedResourceSection<ProductItemFragment>
+            connection={collection.products}
+            resourcesClassName="grid-3"
+          >
+            {({node: product, index}) => (
+              <ProductItem
+                key={product.id}
+                product={product}
+                loading={index < 3 ? 'eager' : undefined}
+              />
+            )}
+          </PaginatedResourceSection>
+        </div>
+      </div>
+
+      <CollectionSEOSection
+        title="Everything You Need to Grow"
+        content={contentData.contentParagraphs}
+        faqs={contentData.faqs}
+      />
+
       <Analytics.CollectionView
         data={{
           collection: {
@@ -92,7 +174,7 @@ export default function Collection() {
           },
         }}
       />
-    </div>
+    </>
   );
 }
 
@@ -105,6 +187,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     id
     handle
     title
+    tags
     featuredImage {
       id
       altText

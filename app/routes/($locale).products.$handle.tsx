@@ -1,4 +1,4 @@
-import {redirect, useLoaderData} from 'react-router';
+import {redirect, useLoaderData, useRef, useState} from 'react-router';
 import type {Route} from './+types/products.$handle';
 import {
   getSelectedProductOptions,
@@ -8,14 +8,22 @@ import {
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
 } from '@shopify/hydrogen';
-import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
-import {ProductForm} from '~/components/ProductForm';
+import {ProductGallery} from '~/components/ProductGallery';
+import {ProductBuyBox} from '~/components/ProductBuyBox';
+import {ProductDetailTabs, NumberedList, SpecTable} from '~/components/ProductDetailTabs';
+import {ProductMobileStickyATC} from '~/components/ProductMobileStickyATC';
+import {ProductRelated} from '~/components/ProductRelated';
+import {useAside} from '~/components/Aside';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+
+type ProductLoaderData = {
+  product: Awaited<ReturnType<typeof loadCriticalData>>['product'];
+  relatedProducts: Awaited<ReturnType<typeof loadCriticalData>>['relatedProducts'];
+};
 
 export const meta: Route.MetaFunction = ({data}) => {
   return [
-    {title: `Hydrogen | ${data?.product.title ?? ''}`},
+    {title: `${data?.product.title ?? ''} | Sierra High Mushrooms`},
     {
       rel: 'canonical',
       href: `/products/${data?.product.handle}`,
@@ -24,19 +32,11 @@ export const meta: Route.MetaFunction = ({data}) => {
 };
 
 export async function loader(args: Route.LoaderArgs) {
-  // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
   return {...deferredData, ...criticalData};
 }
 
-/**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
- */
 async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
   const {handle} = params;
   const {storefront} = context;
@@ -45,81 +45,185 @@ async function loadCriticalData({context, params, request}: Route.LoaderArgs) {
     throw new Error('Expected product handle to be defined');
   }
 
-  const [{product}] = await Promise.all([
+  const [{product, relatedProducts}] = await Promise.all([
     storefront.query(PRODUCT_QUERY, {
       variables: {handle, selectedOptions: getSelectedProductOptions(request)},
     }),
-    // Add other queries here, so that they are loaded in parallel
+    storefront.query(RELATED_PRODUCTS_QUERY, {
+      variables: {handle},
+    }),
   ]);
 
   if (!product?.id) {
     throw new Response(null, {status: 404});
   }
 
-  // The API handle might be localized, so redirect to the localized handle
   redirectIfHandleIsLocalized(request, {handle, data: product});
 
   return {
     product,
+    relatedProducts: relatedProducts?.products?.nodes || [],
   };
 }
 
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- */
 function loadDeferredData({context, params}: Route.LoaderArgs) {
-  // Put any API calls that is not critical to be available on first page render
-  // For example: product reviews, product recommendations, social feeds.
-
   return {};
 }
 
 export default function Product() {
-  const {product} = useLoaderData<typeof loader>();
+  const {product, relatedProducts} = useLoaderData<typeof loader>();
+  const {open} = useAside();
+  const buyBoxRef = useRef<HTMLDivElement>(null);
+  const [quantity, setQuantity] = useState(1);
 
-  // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
     getAdjacentAndFirstAvailableVariants(product),
   );
 
-  // Sets the search param to the selected variant without navigation
-  // only when no search params are set in the url
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
 
-  // Get the product options array
-  const productOptions = getProductOptions({
-    ...product,
-    selectedOrFirstAvailableVariant: selectedVariant,
-  });
+  const productImages = product.images?.nodes || [];
 
-  const {title, descriptionHtml} = product;
+  const detailTabs = [
+    {
+      label: "What's included",
+      content: (
+        <div>
+          <h3>Package Contents</h3>
+          <p>Each order includes everything shown in the product description.</p>
+          <ul style={{marginTop: 'var(--spacing-lg)', paddingLeft: 'var(--spacing-lg)'}}>
+            <li style={{marginBottom: 'var(--spacing-md)'}}>
+              Complete product as described
+            </li>
+            <li style={{marginBottom: 'var(--spacing-md)'}}>
+              Detailed instruction sheet
+            </li>
+            <li>Our growing guide and support resources</li>
+          </ul>
+        </div>
+      ),
+    },
+    {
+      label: 'How to use',
+      content: (
+        <div>
+          <h3>Getting Started</h3>
+          <NumberedList
+            items={[
+              'Inspect package contents upon arrival',
+              'Follow included instructions carefully',
+              'Maintain proper temperature and humidity',
+              'Monitor progress daily',
+              'Contact us with any questions',
+            ]}
+          />
+          <p style={{marginTop: 'var(--spacing-lg)', color: 'var(--color-muted)'}}>
+            Full instructions are included in your shipment. Our team is available to help
+            at any stage of your growing process.
+          </p>
+        </div>
+      ),
+    },
+    {
+      label: 'Specifications',
+      content: (
+        <div>
+          <h3>Technical Details</h3>
+          <SpecTable
+            specs={[
+              {label: 'Item Type', value: 'Grow Supply'},
+              {label: 'Packaging', value: 'Safe, discreet shipping'},
+              {label: 'Origin', value: 'Packed in Sparks, Nevada'},
+              {label: 'Quality Assurance', value: 'Tested & verified'},
+              {label: 'Shelf Life', value: 'As specified per product'},
+            ]}
+          />
+        </div>
+      ),
+    },
+    {
+      label: 'Storage & shipping',
+      content: (
+        <div>
+          <h3>Care & Handling</h3>
+          <p>
+            Store in a cool, dry place away from direct sunlight. Most products should be used
+            within the timeframe indicated on packaging.
+          </p>
+          <h3 style={{marginTop: 'var(--spacing-lg)'}}>Shipping</h3>
+          <p>
+            All orders are carefully packed to order in Sparks, Nevada and shipped via USPS
+            Priority Mail. Most deliveries arrive within 3-5 business days. Tracking
+            information will be provided via email upon shipment.
+          </p>
+        </div>
+      ),
+    },
+  ];
 
   return (
-    <div className="product">
-      <ProductImage image={selectedVariant?.image} />
-      <div className="product-main">
-        <h1>{title}</h1>
-        <ProductPrice
-          price={selectedVariant?.price}
-          compareAtPrice={selectedVariant?.compareAtPrice}
-        />
-        <br />
-        <ProductForm
-          productOptions={productOptions}
-          selectedVariant={selectedVariant}
-        />
-        <br />
-        <br />
-        <p>
-          <strong>Description</strong>
-        </p>
-        <br />
-        <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        <br />
+    <>
+      <div className="wrap">
+        <div style={{padding: 'var(--spacing-3xl) 0'}}>
+          <div style={{marginBottom: 'var(--spacing-lg)'}}>
+            <div
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                color: 'var(--color-muted)',
+                letterSpacing: '0.04em',
+                marginBottom: 'var(--spacing-lg)',
+              }}
+            >
+              <a href="/shop" style={{color: 'var(--color-sage)'}}>
+                Shop
+              </a>{' '}
+              / <a href="/collections/all" style={{color: 'var(--color-sage)'}}> All
+              </a>{' '}
+              / {product.title}
+            </div>
+          </div>
+
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 'var(--spacing-4xl)',
+              alignItems: 'start',
+            }}
+            className="product-detail-grid"
+          >
+            <ProductGallery
+              images={productImages}
+              selectedImage={selectedVariant?.image}
+              onImageSelect={() => {}}
+              badge={product.tags?.includes('bestseller') ? 'bestseller' : null}
+            />
+
+            <div ref={buyBoxRef}>
+              <ProductBuyBox
+                product={product}
+                selectedVariant={selectedVariant}
+                onAddToCart={() => open('cart')}
+              />
+            </div>
+          </div>
+
+          <ProductDetailTabs tabs={detailTabs} />
+
+          {relatedProducts.length > 0 && <ProductRelated products={relatedProducts} />}
+        </div>
       </div>
+
+      <ProductMobileStickyATC
+        product={product}
+        selectedVariant={selectedVariant}
+        quantity={quantity}
+        triggerElement={buyBoxRef}
+      />
+
       <Analytics.ProductView
         data={{
           products: [
@@ -135,7 +239,16 @@ export default function Product() {
           ],
         }}
       />
-    </div>
+
+      <style>{`
+        @media (max-width: 900px) {
+          .product-detail-grid {
+            grid-template-columns: 1fr !important;
+            gap: var(--spacing-2xl) !important;
+          }
+        }
+      `}</style>
+    </>
   );
 }
 
@@ -180,12 +293,22 @@ const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id
     title
+    tags
     vendor
     handle
     descriptionHtml
     description
     encodedVariantExistence
     encodedVariantAvailability
+    images(first: 10) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
     options {
       name
       optionValues {
@@ -229,4 +352,42 @@ const PRODUCT_QUERY = `#graphql
     }
   }
   ${PRODUCT_FRAGMENT}
+` as const;
+
+const RELATED_PRODUCTS_QUERY = `#graphql
+  fragment RelatedProduct on Product {
+    id
+    handle
+    title
+    tags
+    featuredImage {
+      id
+      altText
+      url
+      width
+      height
+    }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+      maxVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+  }
+
+  query RelatedProducts(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
+    products(first: 6, query: "tag:" + $handle) {
+      nodes {
+        ...RelatedProduct
+      }
+    }
+  }
 ` as const;

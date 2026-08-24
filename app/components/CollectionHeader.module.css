@@ -1,0 +1,95 @@
+.header {
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-xl);
+  text-transform: uppercase;
+}
+
+.breadcrumb a {
+  color: var(--color-sage);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-forest);
+  text-decoration: none;
+}
+
+.title {
+  margin-bottom: var(--spacing-lg);
+}
+
+.description {
+  font-size: 15px;
+  color: var(--color-muted);
+  max-width: 600px;
+  margin-bottom: var(--spacing-2xl);
+  line-height: 1.65;
+}
+
+.filterBar {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: var(--spacing-xl);
+}
+
+.filterLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-forest-deep);
+  letter-spacing: 0.08em;
+  margin-right: var(--spacing-sm);
+}
+
+.filterButton {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 1px solid var(--color-line);
+  background-color: var(--color-panel);
+  color: var(--color-forest-deep);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: var(--transition-standard);
+  white-space: nowrap;
+}
+
+.filterButton:hover {
+  border-color: var(--color-sage);
+  background-color: var(--color-bg);
+}
+
+.filterButton.active {
+  background-color: var(--color-forest-deep);
+  color: var(--color-panel);
+  border-color: var(--color-forest-deep);
+}
+
+.productCount {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 900px) {
+  .header {
+    padding: var(--spacing-2xl) var(--spacing-xl);
+  }
+
+  .filterBar {
+    gap: var(--spacing-sm);
+  }
+}

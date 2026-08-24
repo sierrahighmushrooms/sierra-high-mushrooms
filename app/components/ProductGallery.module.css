@@ -1,0 +1,89 @@
+.gallery {
+  position: relative;
+}
+
+.stickyWrapper {
+  position: sticky;
+  top: var(--spacing-lg);
+  align-self: start;
+}
+
+.mainImageContainer {
+  position: relative;
+  margin-bottom: var(--spacing-lg);
+  background-color: var(--color-bg);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.3) sepia(0.12) saturate(1.25);
+  display: block;
+}
+
+.badge {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  color: white;
+  z-index: 10;
+  background-color: var(--color-amber);
+}
+
+.badge.bestseller {
+  background-color: var(--color-peak);
+}
+
+.badge.limited {
+  background-color: var(--color-limited);
+}
+
+.thumbnailsContainer {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--spacing-md);
+}
+
+.thumbnail {
+  aspect-ratio: 1 / 1;
+  background-color: var(--color-bg);
+  border: 2px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: var(--transition-standard);
+}
+
+.thumbnail:hover {
+  border-color: var(--color-sage);
+}
+
+.thumbnail.active {
+  border-color: var(--color-forest-deep);
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(0.3) sepia(0.12) saturate(1.25);
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .stickyWrapper {
+    position: relative;
+    top: auto;
+  }
+}

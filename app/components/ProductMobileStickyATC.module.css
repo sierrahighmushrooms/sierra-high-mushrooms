@@ -1,0 +1,65 @@
+.stickyAtc {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-panel);
+  border-top: 1px solid var(--color-line);
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: none;
+  gap: var(--spacing-md);
+  z-index: 40;
+  animation: slideUp 0.3s cubic-bezier(0.16, 0.8, 0.3, 1);
+}
+
+.stickyAtc.visible {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.productName {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-forest-deep);
+}
+
+.price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.button {
+  flex-shrink: 0;
+}
+
+@media (max-width: 560px) {
+  .stickyAtc {
+    display: none;
+  }
+
+  .stickyAtc.visible {
+    display: flex;
+  }
+}
