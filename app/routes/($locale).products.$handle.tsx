@@ -1,4 +1,4 @@
-import {redirect, useLoaderData, useRef, useState} from 'react-router';
+import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/products.$handle';
 import {
   getSelectedProductOptions,
@@ -11,7 +11,6 @@ import {
 import {ProductGallery} from '~/components/ProductGallery';
 import {ProductBuyBox} from '~/components/ProductBuyBox';
 import {ProductDetailTabs, NumberedList, SpecTable} from '~/components/ProductDetailTabs';
-import {ProductMobileStickyATC} from '~/components/ProductMobileStickyATC';
 import {ProductRelated} from '~/components/ProductRelated';
 import {useAside} from '~/components/Aside';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
@@ -73,8 +72,6 @@ function loadDeferredData({context, params}: Route.LoaderArgs) {
 export default function Product() {
   const {product, relatedProducts} = useLoaderData<typeof loader>();
   const {open} = useAside();
-  const buyBoxRef = useRef<HTMLDivElement>(null);
-  const [quantity, setQuantity] = useState(1);
 
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -202,13 +199,11 @@ export default function Product() {
               badge={product.tags?.includes('bestseller') ? 'bestseller' : null}
             />
 
-            <div ref={buyBoxRef}>
-              <ProductBuyBox
-                product={product}
-                selectedVariant={selectedVariant}
-                onAddToCart={() => open('cart')}
-              />
-            </div>
+            <ProductBuyBox
+              product={product}
+              selectedVariant={selectedVariant}
+              onAddToCart={() => open('cart')}
+            />
           </div>
 
           <ProductDetailTabs tabs={detailTabs} />
@@ -216,13 +211,6 @@ export default function Product() {
           {relatedProducts.length > 0 && <ProductRelated products={relatedProducts} />}
         </div>
       </div>
-
-      <ProductMobileStickyATC
-        product={product}
-        selectedVariant={selectedVariant}
-        quantity={quantity}
-        triggerElement={buyBoxRef}
-      />
 
       <Analytics.ProductView
         data={{

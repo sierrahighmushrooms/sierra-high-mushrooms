@@ -1,4 +1,5 @@
-import {redirect, useLoaderData, useState} from 'react-router';
+import {redirect, useLoaderData} from 'react-router';
+import {useState} from 'react';
 import type {Route} from './+types/collections.$handle';
 import {getPaginationVariables, Analytics} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
