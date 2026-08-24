@@ -124,15 +124,20 @@ export default function Collection() {
     };
 
     const tags = filterMap[filter] || [];
-    return products.filter(
-      (product) =>
-        tags.some((tag) =>
-          (product.tags || []).some((t) =>
-            t.toLowerCase().includes(tag.toLowerCase()),
-          ),
-        ) || tags.length === 0,
+    return products.filter((product) =>
+      tags.some((tag) =>
+        (product.tags || []).some((t) =>
+          t.toLowerCase().includes(tag.toLowerCase()),
+        ),
+      ),
     );
   };
+
+  const filteredProducts = filterProductsByTag(
+    collection.products.nodes,
+    activeFilter,
+  );
+  const visibleProductIds = new Set(filteredProducts.map((p) => p.id));
 
   return (
     <>
@@ -141,7 +146,7 @@ export default function Collection() {
         description={collection.description}
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
-        productCount={collection.products.nodes.length}
+        productCount={filteredProducts.length}
       />
 
       <div className="wrap">
@@ -150,13 +155,16 @@ export default function Collection() {
             connection={collection.products}
             resourcesClassName="grid-3"
           >
-            {({node: product, index}) => (
-              <ProductItem
-                key={product.id}
-                product={product}
-                loading={index < 3 ? 'eager' : undefined}
-              />
-            )}
+            {({node: product, index}) => {
+              if (!visibleProductIds.has(product.id)) return null;
+              return (
+                <ProductItem
+                  key={product.id}
+                  product={product}
+                  loading={index < 3 ? 'eager' : undefined}
+                />
+              );
+            }}
           </PaginatedResourceSection>
         </div>
       </div>
