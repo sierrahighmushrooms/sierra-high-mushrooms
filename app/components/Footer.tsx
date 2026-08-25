@@ -46,9 +46,14 @@ export function Footer() {
 
         {/* Copyright & Social */}
         <div className={styles.bottom}>
-          <p className={styles.copyright}>
-            © {currentYear} Sierra High Mushrooms. All rights reserved.
-          </p>
+          <div className={styles.bottomText}>
+            <p className={styles.copyright}>
+              © {currentYear} Sierra High Mushrooms. All rights reserved.
+            </p>
+            <p className={styles.certificate}>
+              Nevada Producer Certificate #5868
+            </p>
+          </div>
           <div className={styles.social}>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               Instagram

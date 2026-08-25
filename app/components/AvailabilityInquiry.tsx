@@ -15,6 +15,7 @@ const TRUST_POINTS = [
   'Samples are free for Reno/Sparks kitchens',
   'No minimum to start',
   "You'll hear from a person, usually same day",
+  'Licensed Nevada producer — Certificate #5868',
 ];
 
 export const AvailabilityInquiry = forwardRef<
