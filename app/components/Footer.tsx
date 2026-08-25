@@ -16,9 +16,9 @@ export function Footer() {
       { label: 'Fresh Produce', href: '/collections/fresh-produce' },
     ],
     Legal: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms of Service', href: '/terms' },
-      { label: 'Returns & Refunds', href: '/returns' },
+      { label: 'Privacy Policy', href: '/policies/privacy-policy' },
+      { label: 'Terms of Service', href: '/policies/terms-of-service' },
+      { label: 'Returns & Refunds', href: '/policies/refund-policy' },
     ],
   };
 
