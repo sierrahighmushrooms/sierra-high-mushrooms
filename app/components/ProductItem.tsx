@@ -6,6 +6,7 @@ import type {
   RecommendedProductFragment,
 } from 'storefrontapi.generated';
 import {useVariantUrl} from '~/lib/variants';
+import styles from './ProductItem.module.css';
 
 export function ProductItem({
   product,
@@ -21,19 +22,22 @@ export function ProductItem({
   const image = product.featuredImage;
   return (
     <Link
-      className="product-item"
+      className={`product-item ${styles.productItem}`}
       key={product.id}
       prefetch="intent"
       to={variantUrl}
     >
       {image && (
-        <Image
-          alt={image.altText || product.title}
-          aspectRatio="1/1"
-          data={image}
-          loading={loading}
-          sizes="(min-width: 45em) 400px, 100vw"
-        />
+        <div className={styles.mediaWrap}>
+          <Image
+            alt={image.altText || product.title}
+            aspectRatio="1/1"
+            data={image}
+            loading={loading}
+            sizes="(min-width: 45em) 400px, 100vw"
+          />
+          <div className={styles.duotoneOverlay} />
+        </div>
       )}
       <h4>{product.title}</h4>
       <small>

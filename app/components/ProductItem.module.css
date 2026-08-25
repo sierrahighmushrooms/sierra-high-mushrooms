@@ -1,0 +1,41 @@
+.productItem {
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.productItem:hover {
+  transform: translateY(-5px);
+}
+
+.mediaWrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: box-shadow 0.3s ease;
+}
+
+.productItem:hover .mediaWrap {
+  box-shadow: 0 24px 40px -24px rgba(30, 42, 27, 0.25),
+    0 8px 16px -8px rgba(30, 42, 27, 0.12);
+}
+
+.mediaWrap img {
+  filter: grayscale(0.3) sepia(0.12) saturate(1.25);
+  transition: transform 0.3s ease;
+}
+
+.productItem:hover .mediaWrap img {
+  transform: scale(1.05);
+}
+
+.duotoneOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    160deg,
+    rgba(30, 42, 27, 0.35),
+    rgba(51, 69, 47, 0.15)
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
