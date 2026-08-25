@@ -22,13 +22,13 @@ export function ProductItem({
   const image = product.featuredImage;
   return (
     <Link
-      className={`product-item ${styles.productItem}`}
+      className={styles.productItem}
       key={product.id}
       prefetch="intent"
       to={variantUrl}
     >
-      {image && (
-        <div className={styles.mediaWrap}>
+      <div className={styles.media}>
+        {image && (
           <Image
             alt={image.altText || product.title}
             aspectRatio="1/1"
@@ -36,13 +36,18 @@ export function ProductItem({
             loading={loading}
             sizes="(min-width: 45em) 400px, 100vw"
           />
-          <div className={styles.duotoneOverlay} />
+        )}
+        <div className={styles.duotoneOverlay} />
+      </div>
+      <div className={styles.info}>
+        <div className={styles.name}>{product.title}</div>
+        <div className={styles.row}>
+          <span className={styles.price}>
+            <Money data={product.priceRange.minVariantPrice} />
+          </span>
+          <span className={styles.viewCta}>View</span>
         </div>
-      )}
-      <h4>{product.title}</h4>
-      <small>
-        <Money data={product.priceRange.minVariantPrice} />
-      </small>
+      </div>
     </Link>
   );
 }

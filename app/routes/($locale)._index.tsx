@@ -76,61 +76,171 @@ export default function Homepage() {
 }
 
 function HeroSection() {
-  const {ref, offset} = useParallax<HTMLDivElement>(15);
-
   return (
     <section className={styles.hero}>
-      <div
-        ref={ref}
-        className={styles.heroBackground}
-        style={{transform: `translateY(${offset}%)`}}
-      />
-      <div className={styles.heroContent}>
-        <h1 className={styles.heroTitle}>
-          Fresh gourmet mushrooms. Cultivation supplies. Community.
-        </h1>
-        <p className={styles.heroSubtitle}>
-          Grown in Sparks, shipped across the West.
-        </p>
-        <Link to="/collections/mycology-supplies">
-          <button className={styles.heroButton}>Shop now</button>
-        </Link>
+      <div className={`wrap ${styles.heroGrid}`}>
+        <ScrollReveal>
+          <div className={styles.labelTag}>
+            <span className={styles.labelDot} />
+            Sparks, Nevada · Est. Farm
+          </div>
+          <h1 className={styles.heroHeading}>
+            Mushrooms grown here.
+            <br />
+            <em>Cultivation supplies</em> for everyone else.
+          </h1>
+          <p className={styles.heroSub}>
+            A working mushroom farm in Sparks, Nevada — supplying local
+            kitchens fresh, home growers a good kit, and serious mycologists
+            real lab-grade supplies.
+          </p>
+          <div className={styles.heroCtas}>
+            <Link to="/collections/mycology-supplies" className={styles.btnPrimary}>
+              Shop Mycology Supplies
+            </Link>
+            <Link to="/availability" className={styles.btnSecondary}>
+              Restaurant Wholesale
+            </Link>
+          </div>
+        </ScrollReveal>
+        <ScrollReveal>
+          <SpecimenPanel />
+        </ScrollReveal>
       </div>
+
+      <div className="wrap">
+        <ScrollReveal className={styles.photoBand}>
+          <img
+            src="https://images.unsplash.com/photo-1770884844724-ac9e36b599e9?fm=jpg&q=80&w=2400&auto=format&fit=crop"
+            alt="Cluster of fresh oyster mushrooms"
+            loading="lazy"
+          />
+        </ScrollReveal>
+      </div>
+
+      <Ridgeline />
     </section>
+  );
+}
+
+/** Sierra Nevada ridgeline silhouette, layered and low-opacity. */
+function Ridgeline() {
+  return (
+    <svg
+      className={styles.ridgeline}
+      viewBox="0 0 1440 220"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M0,220 L0,140 L120,90 L220,130 L340,60 L430,110 L560,40 L640,95 L760,55 L860,120 L980,70 L1080,115 L1200,50 L1320,100 L1440,75 L1440,220 Z"
+        fill="#33452F"
+        opacity="0.10"
+      />
+      <path
+        d="M0,220 L0,170 L160,130 L280,160 L420,110 L540,150 L680,100 L800,145 L940,105 L1080,155 L1220,120 L1440,150 L1440,220 Z"
+        fill="#33452F"
+        opacity="0.14"
+      />
+    </svg>
+  );
+}
+
+/** Petri-dish specimen card with 3D mouse tilt. */
+function SpecimenPanel() {
+  const {ref, transform, handleMouseMove, handleMouseLeave} =
+    useTilt<HTMLDivElement>();
+
+  const rows = [
+    ['Strain', 'Blue Oyster / Pleurotus columbinus'],
+    ['Medium', 'MEA Agar, high contrast'],
+    ['Status', 'Active — clean growth'],
+    ['Source', 'Sierra High Farm, Sparks NV'],
+  ];
+
+  return (
+    <div
+      ref={ref}
+      className={styles.specimen}
+      style={{transform}}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className={styles.specimenPlate}>
+        <svg viewBox="0 0 200 200" width="100%" height="100%" aria-hidden="true">
+          <defs>
+            <radialGradient id="specimenGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#EFEBDE" stopOpacity="0.9" />
+              <stop offset="45%" stopColor="#EFEBDE" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#EFEBDE" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <circle cx="100" cy="100" r="62" fill="url(#specimenGlow)" />
+          <g stroke="#EFEBDE" strokeWidth="0.6" fill="none" opacity="0.55">
+            <path d="M100,100 L48,66 M48,66 L32,52 M48,66 L40,80" />
+            <path d="M100,100 L152,68 M152,68 L168,54 M152,68 L164,82" />
+            <path d="M100,100 L144,136 M144,136 L160,148 M144,136 L152,160" />
+            <path d="M100,100 L54,146 M54,146 L38,158 M54,146 L44,166" />
+            <path d="M100,100 L104,40 M104,40 L110,22" />
+            <path d="M100,100 L98,158 M98,158 L94,178" />
+          </g>
+        </svg>
+      </div>
+      {rows.map(([label, value]) => (
+        <div key={label} className={styles.specimenRow}>
+          <span>{label.toUpperCase()}</span>
+          <span>{value}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
 function ThreePathsSection() {
   const paths = [
     {
-      icon: '🍄',
-      title: 'For Chefs',
-      description: 'Premium fresh harvests, specialty varieties, and seasonal selections for restaurant and culinary professionals.',
-      link: '/collections/fresh-produce',
+      idx: 'For Chefs',
+      title: 'Fresh mushrooms & basil',
+      description:
+        'Grown and distributed locally around Reno/Sparks. Weekly availability, sample requests, wholesale accounts.',
+      cta: 'See current availability',
+      link: '/availability',
     },
     {
-      icon: '🌱',
-      title: 'Grow at Home',
-      description: 'Beginner-friendly mushroom growing kits and cultivation supplies for home hobbyists and amateur growers.',
+      idx: 'Grow at Home',
+      title: 'Grow kits',
+      description:
+        'Open, mist, harvest. Built for beginners who want real mushrooms without the learning curve.',
+      cta: 'Shop grow kits',
       link: '/collections/grow-kits',
     },
     {
-      icon: '🧬',
-      title: 'Mycology Supplies',
-      description: 'Professional-grade agar, substrate, tools, and supplies for serious cultivators and researchers.',
+      idx: 'Mycology Supplies',
+      title: 'Agar, substrate, sterile tools',
+      description:
+        "For growers who've outgrown the kit. Pre-poured plates, premix, and sterilized substrate.",
+      cta: 'Shop supplies',
       link: '/collections/mycology-supplies',
     },
   ];
 
   return (
-    <section className={styles.pathsSection}>
-      <div className={styles.pathsInner}>
-        <ScrollReveal as="h2" className={styles.pathsHeading}>
-          Choose your path
+    <section className={styles.paths}>
+      <div className="wrap">
+        <ScrollReveal className={styles.sectionHead}>
+          <h2>Three ways in.</h2>
         </ScrollReveal>
-        <ScrollRevealStagger className={styles.pathsGrid}>
+        <ScrollRevealStagger className={styles.pathGrid} staggerMs={120}>
           {paths.map((path) => (
-            <TiltPathCard key={path.title} path={path} />
+            <div key={path.idx} className={styles.pathCard}>
+              <span className={styles.pathIdx}>{path.idx.toUpperCase()}</span>
+              <h3>{path.title}</h3>
+              <p>{path.description}</p>
+              <Link to={path.link} className={styles.pathGo}>
+                {path.cta}
+              </Link>
+            </div>
           ))}
         </ScrollRevealStagger>
       </div>
@@ -138,79 +248,33 @@ function ThreePathsSection() {
   );
 }
 
-function TiltPathCard({
-  path,
-}: {
-  path: {icon: string; title: string; description: string; link: string};
-}) {
-  const {ref, transform, handleMouseMove, handleMouseLeave} =
-    useTilt<HTMLDivElement>(15);
+function FarmTrustSection() {
+  const {ref, offset} = useParallax<HTMLDivElement>(10);
 
   return (
-    <div className={styles.tiltWrapper}>
+    <section className={styles.farm}>
       <div
         ref={ref}
-        className={styles.pathCard}
-        style={{transform}}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        className={styles.farmPhoto}
+        style={{transform: `translateY(${offset}%)`}}
       >
-        <div className={styles.pathIcon}>{path.icon}</div>
-        <h3 className={styles.pathTitle}>{path.title}</h3>
-        <p className={styles.pathDescription}>{path.description}</p>
-        <Link to={path.link} className={styles.pathLink}>
-          Learn more →
-        </Link>
+        <img
+          src="https://images.unsplash.com/photo-1749655248287-d1e0acb5f8d1?fm=jpg&q=80&w=2400&auto=format&fit=crop"
+          alt="Fresh basil growing at the Sierra High Mushrooms farm"
+          loading="lazy"
+        />
       </div>
-    </div>
-  );
-}
-
-function FarmTrustSection() {
-  const {ref, offset} = useParallax<HTMLDivElement>(15);
-
-  return (
-    <section className={styles.farmSection}>
-      <div className={styles.farmInner}>
-        <ScrollReveal>
-          <h2 className={styles.farmHeading}>Grown here, shipped fresh</h2>
-          <p className={styles.farmParagraph}>
-            Sierra High Mushrooms is a family-operated cultivation business
-            based in Sparks, Nevada. We have been perfecting our craft for
-            years, growing premium gourmet and medicinal mushrooms using
-            sustainable, small-batch methods.
+      <div className={styles.farmContent}>
+        <div className="wrap">
+          <h2>A farm you could actually visit.</h2>
+          <p>
+            Every mushroom we sell fresh starts here, in Sparks — not shipped
+            in from somewhere else and relabeled.
           </p>
-          <p className={styles.farmParagraph}>
-            Every mushroom is carefully harvested at peak ripeness, packed to
-            order, and shipped fresh to ensure maximum quality and flavor.
-          </p>
-          <div className={styles.farmIndicators}>
-            {[
-              'Packed to order, shipped fresh',
-              'Real expertise, local operation',
-              'Committed to community values',
-            ].map((indicator) => (
-              <div key={indicator} className={styles.farmIndicator}>
-                <span className={styles.farmCheck}>✓</span>
-                <span className={styles.farmIndicatorText}>{indicator}</span>
-              </div>
-            ))}
-          </div>
-        </ScrollReveal>
-        <ScrollReveal className={styles.farmImageFrame}>
-          <div
-            ref={ref}
-            className={styles.farmImageParallax}
-            style={{transform: `translateY(${offset}%)`}}
-          >
-            <img
-              src="https://images.unsplash.com/photo-1599599810694-a5f8a55fb4a1?w=600&h=600&fit=crop"
-              alt="Sierra High Mushrooms farm"
-              className={styles.farmImage}
-            />
-          </div>
-          <div className={styles.duotoneOverlay} />
-        </ScrollReveal>
+          <Link to="/availability" className={styles.btnLight}>
+            Request wholesale availability
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -248,26 +312,31 @@ function RecommendedProducts({
   products: Promise<RecommendedProductsQuery | null>;
 }) {
   return (
-    <section
-      className={styles.recommendedSection}
-      aria-labelledby="recommended-products"
-    >
-      <ScrollReveal as="h2" className={styles.recommendedHeading}>
-        <span id="recommended-products">Recommended Products</span>
-      </ScrollReveal>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Await resolve={products}>
-          {(response) => (
-            <ScrollRevealStagger className={styles.recommendedGrid}>
-              {response
-                ? response.products.nodes.map((product) => (
-                    <ProductItem key={product.id} product={product} />
-                  ))
-                : null}
-            </ScrollRevealStagger>
-          )}
-        </Await>
-      </Suspense>
+    <section className={styles.products} aria-labelledby="recommended-products">
+      <div className="wrap">
+        <ScrollReveal className={styles.productsHead}>
+          <h2 id="recommended-products">From the shop.</h2>
+          <Link to="/collections/all" className={styles.productsViewAll}>
+            View all products →
+          </Link>
+        </ScrollReveal>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Await resolve={products}>
+            {(response) => (
+              <ScrollRevealStagger
+                className={styles.productGrid}
+                staggerMs={120}
+              >
+                {response
+                  ? response.products.nodes.map((product) => (
+                      <ProductItem key={product.id} product={product} />
+                    ))
+                  : null}
+              </ScrollRevealStagger>
+            )}
+          </Await>
+        </Suspense>
+      </div>
     </section>
   );
 }
