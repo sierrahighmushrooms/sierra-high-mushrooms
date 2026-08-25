@@ -19,6 +19,15 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    // Merges with Hydrogen's default style-src ('self', 'unsafe-inline', cdn.shopify.com)
+    styleSrc: ['https://fonts.googleapis.com'],
+    // No default to merge with for these two, so the full allowed list must be included
+    fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+    imgSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://images.unsplash.com',
+    ],
   });
 
   const body = await renderToReadableStream(
