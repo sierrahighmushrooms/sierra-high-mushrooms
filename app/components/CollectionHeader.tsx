@@ -27,7 +27,7 @@ export function CollectionHeader({
     <div className={styles.header}>
       <div className="wrap">
         <div className={styles.breadcrumb}>
-          <Link to="/shop">Shop</Link> / {title}
+          <Link to="/collections/all">Shop</Link> / {title}
         </div>
 
         <h1 className={styles.title}>{title}</h1>

@@ -8,7 +8,7 @@ export function Footer() {
     Company: [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
-      { label: 'Blog', href: '/blog' },
+      { label: 'For Restaurants', href: '/availability' },
     ],
     Shop: [
       { label: 'Grow Kits', href: '/collections/grow-kits' },

@@ -6,6 +6,7 @@ import {HarvestBoardTable} from '~/components/HarvestBoardTable';
 import {StickyRequestBar} from '~/components/StickyRequestBar';
 import {AvailabilityInquiry} from '~/components/AvailabilityInquiry';
 import {HARVEST_BOARD} from '~/lib/harvest-data';
+import {renderRows, sendNotificationEmail} from '~/lib/send-email';
 
 export const meta: Route.MetaFunction = () => {
   return [
@@ -23,14 +24,6 @@ export type ActionResponse = {
   error?: string;
 };
 
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
 export async function action({
   request,
   context,
@@ -40,19 +33,6 @@ export async function action({
   }
 
   const env = context.env as unknown as Record<string, string | undefined>;
-  const resendApiKey = env.RESEND_API_KEY;
-  const notificationEmail = env.AVAILABILITY_NOTIFICATION_EMAIL;
-
-  if (!resendApiKey || !notificationEmail) {
-    console.error(
-      'Availability inquiry form is missing RESEND_API_KEY or AVAILABILITY_NOTIFICATION_EMAIL',
-    );
-    return data(
-      {success: false, error: 'Form is not configured. Please try again later.'},
-      {status: 500},
-    );
-  }
-
   const form = await request.formData();
   const businessName = String(form.get('businessName') || '').trim();
   const contactName = String(form.get('contactName') || '').trim();
@@ -81,51 +61,18 @@ export async function action({
     ['Notes', notes || '—'],
   ];
 
-  const htmlBody = `
-    <h2>New availability request</h2>
-    <table cellpadding="6" cellspacing="0" border="0">
-      ${rows
-        .map(
-          ([label, value]) =>
-            `<tr><td><strong>${escapeHtml(label)}</strong></td><td>${escapeHtml(value)}</td></tr>`,
-        )
-        .join('')}
-    </table>
-  `;
+  const result = await sendNotificationEmail({
+    env,
+    subject: `Availability request from ${businessName}`,
+    html: renderRows('New availability request', rows),
+    replyTo: email,
+  });
 
-  try {
-    const resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Sierra High Mushrooms <onboarding@resend.dev>',
-        to: [notificationEmail],
-        reply_to: email,
-        subject: `Availability request from ${businessName}`,
-        html: htmlBody,
-      }),
-    });
-
-    if (!resendResponse.ok) {
-      const errorText = await resendResponse.text();
-      console.error('Resend API error:', resendResponse.status, errorText);
-      return data(
-        {success: false, error: 'Could not send your request. Please try again.'},
-        {status: 502},
-      );
-    }
-
-    return data({success: true});
-  } catch (error) {
-    console.error('Failed to send availability request email:', error);
-    return data(
-      {success: false, error: 'Could not send your request. Please try again.'},
-      {status: 500},
-    );
+  if (!result.ok) {
+    return data({success: false, error: result.error}, {status: result.status});
   }
+
+  return data({success: true});
 }
 
 export default function Availability() {
