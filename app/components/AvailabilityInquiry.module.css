@@ -141,6 +141,15 @@
   color: var(--color-muted);
 }
 
+.formError {
+  font-size: 13px;
+  color: var(--color-limited);
+  margin-bottom: var(--spacing-md);
+  padding: 10px 12px;
+  background-color: rgba(184, 134, 47, 0.08);
+  border-left: 2px solid var(--color-limited);
+}
+
 @media (max-width: 900px) {
   .container {
     grid-template-columns: 1fr;

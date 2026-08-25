@@ -1,6 +1,8 @@
-import {useState, forwardRef} from 'react';
+import {forwardRef} from 'react';
+import {useFetcher} from 'react-router';
 import {Button} from './Button';
 import {CITY_OPTIONS, type HarvestItem} from '~/lib/harvest-data';
+import type {ActionResponse} from '~/routes/($locale).availability';
 import styles from './AvailabilityInquiry.module.css';
 
 interface AvailabilityInquiryProps {
@@ -19,19 +21,11 @@ export const AvailabilityInquiry = forwardRef<
   HTMLDivElement,
   AvailabilityInquiryProps
 >(function AvailabilityInquiry({selectedItems, onRemoveItem}, ref) {
-  const [submitted, setSubmitted] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setIsSubmitting(true);
-    // TODO: wire up to a real backend / email service. For now this
-    // simulates submission so the flow can be tested end-to-end.
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitted(true);
-    }, 500);
-  };
+  const fetcher = useFetcher<ActionResponse>();
+  const isSubmitting = fetcher.state !== 'idle';
+  const submitted = fetcher.data?.success === true;
+  const submitError =
+    fetcher.data?.success === false ? fetcher.data.error : null;
 
   return (
     <section className={styles.section} ref={ref}>
@@ -58,7 +52,12 @@ export const AvailabilityInquiry = forwardRef<
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit}>
+            <fetcher.Form method="post">
+              <input
+                type="hidden"
+                name="interestedIn"
+                value={selectedItems.map((item) => item.variety).join(', ')}
+              />
               <div className={styles.chipsSection}>
                 <span className={styles.chipsLabel}>Interested in</span>
                 {selectedItems.length === 0 ? (
@@ -144,6 +143,12 @@ export const AvailabilityInquiry = forwardRef<
                 <textarea id="notes" name="notes" rows={3} />
               </div>
 
+              {submitError && (
+                <p className={styles.formError} role="alert">
+                  {submitError}
+                </p>
+              )}
+
               <Button
                 type="submit"
                 variant="primary"
@@ -158,7 +163,7 @@ export const AvailabilityInquiry = forwardRef<
                 We&rsquo;ll reply with real availability and pricing &mdash;
                 usually the same day.
               </p>
-            </form>
+            </fetcher.Form>
           )}
         </div>
       </div>
