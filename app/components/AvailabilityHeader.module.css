@@ -1,0 +1,94 @@
+.header {
+  padding: var(--spacing-3xl) var(--spacing-xl) var(--spacing-2xl);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-xl);
+  text-transform: uppercase;
+}
+
+.breadcrumb a {
+  color: var(--color-sage);
+}
+
+.breadcrumb a:hover {
+  color: var(--color-forest);
+  text-decoration: none;
+}
+
+.title {
+  margin-bottom: var(--spacing-md);
+}
+
+.lede {
+  font-size: 15px;
+  color: var(--color-muted);
+  max-width: 640px;
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.65;
+}
+
+.statusStamp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: 10px 16px;
+  background-color: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--color-forest-deep);
+}
+
+.pulsingDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-peak);
+  flex-shrink: 0;
+  position: relative;
+}
+
+.pulsingDot::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--color-peak);
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pulsingDot::before {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    padding: var(--spacing-2xl) var(--spacing-lg) var(--spacing-xl);
+  }
+
+  .statusStamp {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+}

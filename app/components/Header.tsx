@@ -13,6 +13,7 @@ export function Header({ cartCount = 0 }: HeaderProps) {
     { label: 'Grow Kits', href: '/collections/grow-kits' },
     { label: 'Mycology Supplies', href: '/collections/mycology-supplies' },
     { label: 'Fresh Produce', href: '/collections/fresh-produce' },
+    { label: 'For Restaurants', href: '/availability' },
     { label: 'About', href: '/about' },
   ];
 

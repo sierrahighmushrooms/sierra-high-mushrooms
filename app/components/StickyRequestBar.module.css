@@ -1,0 +1,96 @@
+.bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-forest-deep);
+  color: var(--color-bg);
+  z-index: 40;
+  transform: translateY(100%);
+  transition: transform 0.35s cubic-bezier(0.16, 0.8, 0.3, 1);
+}
+
+.bar.visible {
+  transform: translateY(0);
+}
+
+.inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.itemList {
+  font-size: 13px;
+  color: rgba(241, 242, 233, 0.75);
+}
+
+.actions {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: rgba(241, 242, 233, 0.75);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  padding: 8px 12px;
+  transition: var(--transition-standard);
+}
+
+.clearButton:hover {
+  color: var(--color-bg);
+}
+
+.requestButton {
+  background-color: var(--color-amber);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 3px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--transition-standard);
+}
+
+.requestButton:hover {
+  background-color: var(--color-limited);
+}
+
+@media (max-width: 560px) {
+  .inner {
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .itemList {
+    display: none;
+  }
+}
