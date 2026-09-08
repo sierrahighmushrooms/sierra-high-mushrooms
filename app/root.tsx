@@ -220,7 +220,7 @@ export function ErrorBoundary() {
   }
 
   return (
-    <div className="route-error">
+    <div className="route-error wrap">
       <h1>Oops</h1>
       <h2>{errorStatus}</h2>
       {errorMessage && (

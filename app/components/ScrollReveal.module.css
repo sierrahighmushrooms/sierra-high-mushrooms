@@ -1,32 +1,32 @@
+/*
+ * Progressive-enhancement reveal.
+ *
+ * `.reveal` alone (server render / no JS / reduced motion) is fully visible and
+ * carries no transition, so first paint and LCP are unaffected. The `.hidden`
+ * and `.visible` modifiers are only ever added by JS after hydration.
+ */
 .reveal {
+  /* visible by default — nothing to declare */
+}
+
+.hidden {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.75s cubic-bezier(0.16, 0.8, 0.3, 1),
-    transform 0.75s cubic-bezier(0.16, 0.8, 0.3, 1);
 }
 
-.reveal.visible {
+.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-.staggerItem {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.75s cubic-bezier(0.16, 0.8, 0.3, 1),
+  transition:
+    opacity 0.75s cubic-bezier(0.16, 0.8, 0.3, 1),
     transform 0.75s cubic-bezier(0.16, 0.8, 0.3, 1);
-}
-
-.staggerItem.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal,
-  .staggerItem {
-    transition: none;
+  .hidden,
+  .visible {
     opacity: 1;
     transform: none;
+    transition: none;
   }
 }

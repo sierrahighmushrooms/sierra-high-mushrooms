@@ -37,11 +37,20 @@
   border-bottom-color: var(--color-forest-deep);
 }
 
+/* Positioned containing block for the absolutely-stacked panels below.
+   Without this, their `width: 100%` resolved against <body> and each
+   inactive panel stuck ~32px past the viewport edge. */
+.panels {
+  position: relative;
+}
+
 .tabContent {
   opacity: 0;
   transform: translateY(12px);
   pointer-events: none;
   position: absolute;
+  top: 0;
+  left: 0;
   visibility: hidden;
   transition: var(--transition-reveal);
   width: 100%;

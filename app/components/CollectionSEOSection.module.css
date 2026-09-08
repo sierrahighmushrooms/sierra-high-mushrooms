@@ -102,6 +102,7 @@
 
 @media (max-width: 560px) {
   .section {
-    padding: var(--spacing-2xl) var(--spacing-xl);
+    /* Match the 16px mobile gutter of the grid above it */
+    padding: var(--spacing-2xl) var(--spacing-md);
   }
 }

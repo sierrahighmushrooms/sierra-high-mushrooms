@@ -30,7 +30,7 @@ export function ProductDetailTabs({tabs}: ProductDetailTabsProps) {
         ))}
       </div>
 
-      <div>
+      <div className={styles.panels}>
         {tabs.map((tab, index) => (
           <div
             key={index}

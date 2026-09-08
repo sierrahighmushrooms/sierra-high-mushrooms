@@ -14,6 +14,42 @@ img {
 
 /*
 * --------------------------------------------------
+* Skeleton route gutters
+*
+* These routes render a bare top-level <div className="{name}"> and never
+* adopted the `.wrap` utility, so their content sat flush against the viewport
+* edge on mobile (the skeleton's `body > main` margin no longer matches the
+* real DOM tree). One shared, responsive gutter — scoped with `>` so it only
+* hits the route wrapper, never a same-named element nested inside it. Matches
+* `.wrap`: 16px on phones, 24px on tablet, 32px + centered on desktop.
+* --------------------------------------------------
+*/
+.page-content > .cart,
+.page-content > .collections,
+.page-content > .collection,
+.page-content > .search,
+.page-content > .blogs,
+.page-content > .blog,
+.page-content > .article,
+.page-content > .page,
+.page-content > .policies,
+.page-content > .policy,
+.page-content > .account {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--spacing-md);
+
+  @media (min-width: 480px) {
+    padding-inline: var(--spacing-lg);
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: var(--spacing-xl);
+  }
+}
+
+/*
+* --------------------------------------------------
 * Non anchor links
 * --------------------------------------------------
 */
@@ -458,7 +494,10 @@ button.reset:hover:not(:has(> *)) {
 .collections-grid {
   display: grid;
   grid-gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--grid-item-width)), 1fr)
+  );
   margin-bottom: 2rem;
 }
 
@@ -482,7 +521,10 @@ button.reset:hover:not(:has(> *)) {
 .products-grid {
   display: grid;
   grid-gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--grid-item-width)), 1fr)
+  );
   margin-bottom: 2rem;
 }
 
@@ -560,7 +602,10 @@ button.reset:hover:not(:has(> *)) {
 .blog-grid {
   display: grid;
   grid-gap: 1.5rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--grid-item-width)), 1fr)
+  );
   margin-bottom: 2rem;
 }
 

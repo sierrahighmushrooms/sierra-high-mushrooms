@@ -134,6 +134,16 @@ select {
   transition: var(--transition-standard);
 }
 
+/* iOS Safari zooms the viewport when a focused control is under 16px.
+   Bump to 16px on phones/small tablets; desktop keeps the 14px above. */
+@media (max-width: 900px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+}
+
 input:focus,
 textarea:focus,
 select:focus {
@@ -161,7 +171,17 @@ label .optional {
 .wrap {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  /* Responsive gutter: tight on phones, roomier on tablet, unchanged (32px)
+     on desktop. Also the shared gutter for skeleton routes (see app.css). */
+  padding-inline: var(--spacing-md);
+
+  @media (min-width: 480px) {
+    padding-inline: var(--spacing-lg);
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: var(--spacing-xl);
+  }
 }
 
 .container {
@@ -414,13 +434,15 @@ img {
   padding-bottom: var(--spacing-lg);
 }
 
+/* Vertical rhythm only — horizontal gutter comes from the enclosing .wrap,
+   so nesting .section-padding inside .wrap no longer double-pads. */
 .section-padding {
-  padding: var(--spacing-3xl) var(--spacing-xl);
+  padding-block: var(--spacing-3xl);
 }
 
 @media (max-width: 900px) {
   .section-padding {
-    padding: var(--spacing-2xl) var(--spacing-xl);
+    padding-block: var(--spacing-2xl);
   }
 }
 

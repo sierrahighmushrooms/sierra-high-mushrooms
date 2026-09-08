@@ -1,29 +1,33 @@
 import type {ReactNode} from 'react';
-import {Children, cloneElement, isValidElement} from 'react';
-import {useInView} from '~/hooks/useInView';
+import {Children, isValidElement} from 'react';
+import {useReveal, type RevealState} from '~/hooks/useReveal';
 import styles from './ScrollReveal.module.css';
+
+function revealClass(state: RevealState) {
+  if (state === 'hidden') return styles.hidden;
+  if (state === 'visible') return styles.visible;
+  return '';
+}
 
 interface ScrollRevealProps {
   children: ReactNode;
   className?: string;
-  as?: keyof React.JSX.IntrinsicElements;
 }
 
-/** Fades + slides a single block in when it scrolls into view. */
-export function ScrollReveal({
-  children,
-  className,
-  as: Tag = 'div',
-}: ScrollRevealProps) {
-  const {ref, isInView} = useInView<HTMLDivElement>();
+/**
+ * Fades + slides a single block in when it scrolls into view.
+ * Progressive enhancement: content is visible by default (see useReveal).
+ */
+export function ScrollReveal({children, className}: ScrollRevealProps) {
+  const {ref, state} = useReveal<HTMLDivElement>();
 
   return (
-    <Tag
-      ref={ref as never}
-      className={`${styles.reveal} ${isInView ? styles.visible : ''} ${className || ''}`}
+    <div
+      ref={ref}
+      className={`${styles.reveal} ${revealClass(state)} ${className || ''}`}
     >
       {children}
-    </Tag>
+    </div>
   );
 }
 
@@ -33,36 +37,31 @@ interface ScrollRevealStaggerProps {
   staggerMs?: number;
 }
 
-/** Fades + slides each direct child in with a staggered delay when the group scrolls into view. */
+/**
+ * Fades + slides each direct child in with a staggered delay when the group
+ * scrolls into view. Visible by default; animates only after enhancement.
+ */
 export function ScrollRevealStagger({
   children,
   className,
   staggerMs = 90,
 }: ScrollRevealStaggerProps) {
-  const {ref, isInView} = useInView<HTMLDivElement>();
+  const {ref, state} = useReveal<HTMLDivElement>();
   const items = Children.toArray(children);
 
   return (
     <div ref={ref} className={className}>
       {items.map((child, index) => {
-        const style = {transitionDelay: isInView ? `${index * staggerMs}ms` : '0ms'};
-
-        if (isValidElement(child)) {
-          return (
-            <div
-              key={child.key ?? index}
-              className={`${styles.staggerItem} ${isInView ? styles.visible : ''}`}
-              style={style}
-            >
-              {child}
-            </div>
-          );
-        }
+        const style =
+          state === 'visible'
+            ? {transitionDelay: `${index * staggerMs}ms`}
+            : undefined;
+        const key = isValidElement(child) ? (child.key ?? index) : index;
 
         return (
           <div
-            key={index}
-            className={`${styles.staggerItem} ${isInView ? styles.visible : ''}`}
+            key={key}
+            className={`${styles.reveal} ${revealClass(state)}`}
             style={style}
           >
             {child}

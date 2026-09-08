@@ -243,4 +243,9 @@
   .quantitySection {
     padding: var(--spacing-md) 0;
   }
+
+  /* 16px minimum so focusing the field doesn't trigger iOS zoom */
+  .quantityInput {
+    font-size: 16px;
+  }
 }
