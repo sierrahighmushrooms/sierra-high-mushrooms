@@ -1,21 +1,15 @@
-﻿import { Link, useRouteLoaderData } from 'react-router';
-import type { RootLoader } from '~/root';
+import {Link} from 'react-router';
+import {useAside} from '~/components/Aside';
+import {PRIMARY_NAV} from '~/lib/nav';
 import styles from './Header.module.css';
 
 interface HeaderProps {
   cartCount?: number;
 }
 
-export function Header({ cartCount = 0 }: HeaderProps) {
-  const data = useRouteLoaderData<RootLoader>('root');
-
-  const navLinks = [
-    { label: 'Grow Kits', href: '/collections/grow-kits' },
-    { label: 'Mycology Supplies', href: '/collections/mycology-supplies' },
-    { label: 'Fresh Produce', href: '/collections/fresh-produce' },
-    { label: 'For Restaurants', href: '/availability' },
-    { label: 'About', href: '/about' },
-  ];
+export function Header({cartCount = 0}: HeaderProps) {
+  const {type, open} = useAside();
+  const menuOpen = type === 'mobile';
 
   return (
     <header className={styles.header}>
@@ -26,8 +20,8 @@ export function Header({ cartCount = 0 }: HeaderProps) {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className={styles.navDesktop}>
-          {navLinks.map((link) => (
+        <nav className={styles.navDesktop} aria-label="Primary">
+          {PRIMARY_NAV.map((link) => (
             <Link key={link.href} to={link.href} className={styles.navLink}>
               {link.label}
             </Link>
@@ -37,19 +31,28 @@ export function Header({ cartCount = 0 }: HeaderProps) {
         {/* CTAs */}
         <div className={styles.ctas}>
           <Link to="/search" className={styles.iconButton} aria-label="Search">
-            <span>🔍</span>
+            <span aria-hidden="true">🔍</span>
           </Link>
-          <Link to="/cart" className={styles.cartButton}>
-            <span>🛒</span>
-            {cartCount > 0 && <span className={styles.cartCount}>{cartCount}</span>}
+          <Link to="/cart" className={styles.cartButton} aria-label="Cart">
+            <span aria-hidden="true">🛒</span>
+            {cartCount > 0 && (
+              <span className={styles.cartCount}>{cartCount}</span>
+            )}
           </Link>
         </div>
 
         {/* Mobile Navigation Toggle */}
-        <button className={styles.mobileToggle} aria-label="Toggle menu">
-          <span></span>
-          <span></span>
-          <span></span>
+        <button
+          type="button"
+          className={styles.mobileToggle}
+          aria-label="Open menu"
+          aria-haspopup="dialog"
+          aria-expanded={menuOpen}
+          onClick={() => open('mobile')}
+        >
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
+          <span aria-hidden="true" />
         </button>
       </div>
     </header>

@@ -3,9 +3,13 @@ import {
   type ReactNode,
   useContext,
   useEffect,
+  useRef,
   useState,
 } from 'react';
 import {useId} from 'react';
+
+const FOCUSABLE_SELECTOR =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 type AsideType = 'search' | 'cart' | 'mobile' | 'closed';
 type AsideContextValue = {
@@ -36,6 +40,8 @@ export function Aside({
   const {type: activeType, close} = useAside();
   const expanded = type === activeType;
   const id = useId();
+  const asideRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
     const abortController = new AbortController();
 
@@ -53,6 +59,46 @@ export function Aside({
     return () => abortController.abort();
   }, [close, expanded]);
 
+  // While the drawer is open, move focus into it, keep Tab inside it, and
+  // return focus to whatever opened it once it closes.
+  useEffect(() => {
+    if (!expanded) return;
+    const panel = asideRef.current;
+    if (!panel) return;
+
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
+    const focusable = () =>
+      Array.from(panel.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR));
+
+    (focusable()[0] ?? panel).focus({preventScroll: true});
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key !== 'Tab') return;
+      const items = focusable();
+      if (items.length === 0) {
+        event.preventDefault();
+        return;
+      }
+      const first = items[0];
+      const last = items[items.length - 1];
+      const active = document.activeElement;
+      if (event.shiftKey && (active === first || active === panel)) {
+        event.preventDefault();
+        last.focus({preventScroll: true});
+      } else if (!event.shiftKey && active === last) {
+        event.preventDefault();
+        first.focus({preventScroll: true});
+      }
+    }
+
+    panel.addEventListener('keydown', onKeyDown);
+    return () => {
+      panel.removeEventListener('keydown', onKeyDown);
+      previouslyFocused?.focus?.({preventScroll: true});
+    };
+  }, [expanded]);
+
   return (
     <div
       aria-modal
@@ -60,8 +106,13 @@ export function Aside({
       role="dialog"
       aria-labelledby={id}
     >
-      <button className="close-outside" onClick={close} />
-      <aside>
+      <button
+        className="close-outside"
+        onClick={close}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <aside ref={asideRef} tabIndex={-1}>
         <header>
           <h3 id={id}>{heading}</h3>
           <button className="close reset" onClick={close} aria-label="Close">

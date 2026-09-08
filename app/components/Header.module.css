@@ -1,4 +1,4 @@
-﻿.header {
+.header {
   position: sticky;
   top: 0;
   z-index: 40;
@@ -14,22 +14,29 @@
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  /* Mobile-first: tight gutters + gaps so logo + 3 controls always fit.
+     Desktop values are restored in the min-width query below. */
+  padding: 0 var(--spacing-md);
   width: 100%;
   display: flex;
   align-items: center;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-sm);
 }
 
 .logo {
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   color: var(--color-forest-deep);
   text-decoration: none;
   white-space: nowrap;
   transition: var(--transition-standard);
-  flex-shrink: 0;
+  /* The logo is the only flexible item: it truncates before it can push the
+     controls (or the page) past the viewport edge. */
+  min-width: 0;
+  flex: 0 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .logo:hover {
@@ -42,12 +49,6 @@
   margin: 0;
   list-style: none;
   align-items: center;
-}
-
-@media (min-width: 901px) {
-  .navDesktop {
-    display: flex;
-  }
 }
 
 .navLink {
@@ -66,45 +67,33 @@
 
 .ctas {
   display: flex;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-xs);
   margin-left: auto;
   align-items: center;
+  flex-shrink: 0;
 }
 
-.iconButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 3px;
-  color: var(--color-ink);
-  text-decoration: none;
-  transition: var(--transition-standard);
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.iconButton:hover {
-  background-color: var(--color-line);
-  color: var(--color-forest-deep);
-}
-
+.iconButton,
 .cartButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 3px;
   color: var(--color-ink);
   text-decoration: none;
   transition: var(--transition-standard);
   font-size: 18px;
   cursor: pointer;
+  flex-shrink: 0;
+}
+
+.cartButton {
   position: relative;
 }
 
+.iconButton:hover,
 .cartButton:hover {
   background-color: var(--color-line);
   color: var(--color-forest-deep);
@@ -129,12 +118,16 @@
 .mobileToggle {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
-  margin-left: auto;
-  padding: 8px;
+  flex-shrink: 0;
 }
 
 .mobileToggle span {
@@ -147,6 +140,30 @@
 }
 
 @media (min-width: 901px) {
+  .container {
+    padding: 0 var(--spacing-xl);
+    gap: var(--spacing-2xl);
+  }
+
+  .logo {
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .navDesktop {
+    display: flex;
+  }
+
+  .ctas {
+    gap: var(--spacing-lg);
+  }
+
+  .iconButton,
+  .cartButton {
+    width: 40px;
+    height: 40px;
+  }
+
   .mobileToggle {
     display: none;
   }

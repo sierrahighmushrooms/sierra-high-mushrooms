@@ -17,6 +17,7 @@ import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
 import tailwindCss from './styles/tailwind.css?url';
 import globalsStyles from './styles/globals.css?url';
+import {Aside} from './components/Aside';
 import {PageLayout} from './components/PageLayout';
 import {Header} from './components/Header';
 import {Footer} from './components/Footer';
@@ -191,15 +192,17 @@ export default function App() {
       shop={data.shop}
       consent={data.consent}
     >
-      <div className="app-layout">
-        <Header cartCount={data.cart?.lines?.length || 0} />
-        <main className="app-main">
-          <PageLayout {...data}>
-            <Outlet />
-          </PageLayout>
-        </main>
-        <Footer />
-      </div>
+      <Aside.Provider>
+        <div className="app-layout">
+          <Header cartCount={data.cart?.lines?.length || 0} />
+          <main className="app-main">
+            <PageLayout {...data}>
+              <Outlet />
+            </PageLayout>
+          </main>
+          <Footer />
+        </div>
+      </Aside.Provider>
     </Analytics.Provider>
   );
 }

@@ -11,3 +11,6 @@ node_modules
 .vite
 .DS_Store
 .claude/settings.local.json
+
+# TypeScript incremental build cache
+tsconfig.tsbuildinfo

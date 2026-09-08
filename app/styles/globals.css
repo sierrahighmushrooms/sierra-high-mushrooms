@@ -50,6 +50,12 @@
 
 html {
   scroll-behavior: smooth;
+  /* Safety net against horizontal page scroll. `clip` (unlike `hidden`) does
+     not create a scroll container, so sticky/fixed positioning is unaffected.
+     The header overflow itself is fixed at the source in Header.module.css;
+     this additionally contains a pre-existing off-screen panel in
+     ProductDetailTabs (see mobile audit) until that gets its own fix. */
+  overflow-x: clip;
 }
 
 body {

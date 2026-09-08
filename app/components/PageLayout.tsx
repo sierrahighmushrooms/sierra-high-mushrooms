@@ -7,6 +7,7 @@ import type {
 } from 'storefrontapi.generated';
 import {Aside} from '~/components/Aside';
 import {CartMain} from '~/components/CartMain';
+import {MobileMenuAside} from '~/components/MobileMenuAside';
 import {
   SEARCH_ENDPOINT,
   SearchFormPredictive,
@@ -26,12 +27,15 @@ export function PageLayout({
   cart,
   children = null,
 }: PageLayoutProps) {
+  // Aside.Provider now lives in root.tsx so the Header (a sibling of this
+  // component) can open the mobile menu drawer via useAside().
   return (
-    <Aside.Provider>
+    <>
       <CartAside cart={cart} />
       <SearchAside />
+      <MobileMenuAside />
       <main>{children}</main>
-    </Aside.Provider>
+    </>
   );
 }
 

@@ -165,7 +165,9 @@ aside li {
   transition: opacity 400ms ease-in-out;
   transition: opacity 400ms;
   visibility: hidden;
-  z-index: 10;
+  /* Above the sticky site header (z-index: 40) so the drawer and its close
+     control are never covered when opened at the top of the page. */
+  z-index: 100;
 }
 
 .overlay .close-outside {
