@@ -64,6 +64,7 @@ function SearchAside() {
             <>
               <input
                 name="q"
+                aria-label="Search"
                 onChange={fetchResults}
                 onFocus={fetchResults}
                 placeholder="Search"

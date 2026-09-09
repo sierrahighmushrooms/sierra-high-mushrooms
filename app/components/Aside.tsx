@@ -119,7 +119,7 @@ export function Aside({
             &times;
           </button>
         </header>
-        <main>{children}</main>
+        <div className="aside-body">{children}</div>
       </aside>
     </div>
   );

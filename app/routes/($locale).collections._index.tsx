@@ -4,6 +4,10 @@ import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import type {CollectionFragment} from 'storefrontapi.generated';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 
+export const meta: Route.MetaFunction = () => {
+  return [{title: `Collections | Sierra High Mushrooms`}];
+};
+
 export async function loader(args: Route.LoaderArgs) {
   // Start fetching non-critical data without blocking time to first byte
   const deferredData = loadDeferredData(args);

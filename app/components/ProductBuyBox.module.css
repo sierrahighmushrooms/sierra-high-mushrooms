@@ -185,6 +185,11 @@
   outline: none;
 }
 
+.quantityInput:focus-visible {
+  outline: 2px solid var(--color-forest-deep);
+  outline-offset: -2px;
+}
+
 .addToCartButton {
   width: 100%;
   padding: 18px 24px;

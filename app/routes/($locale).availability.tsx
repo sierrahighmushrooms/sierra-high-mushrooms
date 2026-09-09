@@ -141,6 +141,7 @@ export default function Availability() {
         selectedItems={selectedItems}
         onClear={clearSelection}
         onRequest={scrollToInquiry}
+        anchorRef={inquiryRef}
       />
     </>
   );

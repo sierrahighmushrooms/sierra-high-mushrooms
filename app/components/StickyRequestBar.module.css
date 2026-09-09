@@ -18,6 +18,7 @@
   max-width: var(--max-width);
   margin: 0 auto;
   padding: var(--spacing-md) var(--spacing-xl);
+  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,13 +55,14 @@
 .clearButton {
   background: none;
   border: none;
-  color: rgba(241, 242, 233, 0.75);
+  color: rgba(241, 242, 233, 0.85);
   font-family: var(--font-mono);
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   cursor: pointer;
-  padding: 8px 12px;
+  min-height: 44px;
+  padding: 0 12px;
   transition: var(--transition-standard);
 }
 
@@ -70,11 +72,12 @@
 
 .requestButton {
   background-color: var(--color-amber);
-  color: white;
+  color: var(--color-forest-deep);
   border: none;
-  padding: 12px 20px;
+  min-height: 44px;
+  padding: 0 20px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: 3px;
   cursor: pointer;
   white-space: nowrap;
@@ -82,7 +85,7 @@
 }
 
 .requestButton:hover {
-  background-color: var(--color-limited);
+  background-color: #C29A4E;
 }
 
 @media (max-width: 560px) {

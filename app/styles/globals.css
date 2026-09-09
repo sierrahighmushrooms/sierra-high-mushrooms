@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=Inter:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+/* Fonts are loaded via <link> in the document head (see app/root.tsx) so they
+   are discovered during HTML parse instead of after this stylesheet downloads. */
 
 :root {
   /* Color Palette */
@@ -10,13 +10,17 @@
   --color-bg: #F1F2E9;
   --color-panel: #FFFFFF;
   --color-ink: #1E2318;
-  --color-muted: rgba(30, 35, 24, 0.6);
+  /* Muted body copy — ~5:1 on both --color-bg and --color-panel (was 0.6 / ~4:1). */
+  --color-muted: rgba(30, 35, 24, 0.68);
   --color-line: rgba(30, 42, 27, 0.12);
+  /* Link colour with AA contrast on --color-bg (plain --color-sage is ~3.8:1). */
+  --color-link: #4F6238;
 
-  /* Status Colors */
-  --color-peak: #4E7B3C;
-  --color-limited: #B8862F;
-  --color-soon: #8A8778;
+  /* Status Colors — darkened slightly so the small mono labels clear AA
+     against the cream background while staying green / amber / grey. */
+  --color-peak: #3F6B2F;
+  --color-limited: #A6741F;
+  --color-soon: #6A6857;
 
   /* Typography */
   --font-serif: 'Fraunces', serif;
@@ -104,7 +108,7 @@ p {
 }
 
 a {
-  color: var(--color-sage);
+  color: var(--color-link);
   text-decoration: none;
   transition: var(--transition-standard);
 }
@@ -119,6 +123,18 @@ button {
   cursor: pointer;
   border: none;
   transition: var(--transition-standard);
+}
+
+/* Deliberate keyboard focus indicator across all interactive elements.
+   :focus-visible only shows for keyboard/AT users, not mouse clicks. */
+:focus-visible {
+  outline: 2px solid var(--color-forest-deep);
+  outline-offset: 2px;
+}
+
+a:focus-visible {
+  outline-offset: 3px;
+  border-radius: 1px;
 }
 
 input,
@@ -148,6 +164,15 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
+  border-color: var(--color-sage);
+}
+
+/* Keyboard focus keeps the border cue and adds a visible ring. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--color-forest-deep);
+  outline-offset: 1px;
   border-color: var(--color-sage);
 }
 

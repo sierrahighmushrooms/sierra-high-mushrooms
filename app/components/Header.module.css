@@ -54,13 +54,14 @@
 .navLink {
   font-size: 14px;
   color: var(--color-ink);
-  opacity: 0.6;
+  opacity: 0.72;
   transition: var(--transition-standard);
   text-decoration: none;
   white-space: nowrap;
 }
 
-.navLink:hover {
+.navLink:hover,
+.navLink:focus-visible {
   color: var(--color-forest-deep);
   opacity: 1;
 }

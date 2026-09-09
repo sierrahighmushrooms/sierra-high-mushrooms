@@ -5,7 +5,6 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 640px;
 }
 
 .table thead th {
@@ -31,7 +30,7 @@
 }
 
 .row.selected {
-  background-color: rgba(78, 123, 60, 0.08);
+  background-color: rgba(63, 107, 47, 0.1);
 }
 
 .row.unavailable {
@@ -52,26 +51,31 @@
 }
 
 .checkbox {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   border: 2px solid var(--color-line);
-  border-radius: 3px;
+  border-radius: 4px;
   background-color: var(--color-panel);
   display: flex;
   align-items: center;
   justify-content: center;
   transition: var(--transition-standard);
+  font-size: 12px;
 }
 
 .checkbox.checked {
   background-color: var(--color-forest-deep);
   border-color: var(--color-forest-deep);
   color: var(--color-bg);
-  font-size: 12px;
 }
 
 .checkbox.disabled {
   opacity: 0.3;
+}
+
+.varietyLabel,
+.metaLabel {
+  display: none;
 }
 
 .variety {
@@ -148,12 +152,101 @@
   font-style: italic;
 }
 
-@media (max-width: 900px) {
-  .table {
-    min-width: 560px;
+/* ---- Tablet keeps a compact table ---- */
+@media (max-width: 900px) and (min-width: 621px) {
+  .cell,
+  .table thead th {
+    padding: var(--spacing-md);
+  }
+}
+
+/* ---- Phones: each row becomes a card, no horizontal scroll ---- */
+@media (max-width: 620px) {
+  .table,
+  .table tbody {
+    display: block;
+    width: 100%;
   }
 
-  .cell {
+  .table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .table tr.row {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    grid-template-areas:
+      'check variety'
+      'check status'
+      'meta1 meta1'
+      'meta2 meta2';
+    column-gap: var(--spacing-md);
+    row-gap: var(--spacing-sm);
+    align-items: start;
+    border: 1px solid var(--color-line);
+    border-radius: 8px;
     padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .table tr.row:last-child {
+    margin-bottom: 0;
+  }
+
+  .table td.cell {
+    display: block;
+    padding: 0;
+    vertical-align: baseline;
+  }
+
+  .table td.checkboxCell {
+    grid-area: check;
+    width: auto;
+    padding-top: 2px;
+  }
+
+  .table td.varietyCell {
+    grid-area: variety;
+  }
+
+  .table td.statusCell {
+    grid-area: status;
+    min-width: 0;
+  }
+
+  .statusBar {
+    width: 100%;
+    max-width: 220px;
+  }
+
+  .table td.metaCell {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+    font-size: 13px;
+  }
+
+  .table td.metaCell:nth-of-type(4) {
+    grid-area: meta1;
+    padding-top: var(--spacing-sm);
+    border-top: 1px solid var(--color-line);
+  }
+
+  .table td.metaCell:nth-of-type(5) {
+    grid-area: meta2;
+  }
+
+  .metaLabel {
+    display: inline;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-muted);
   }
 }

@@ -93,14 +93,14 @@
 
 .copyright {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.72);
   margin: 0;
 }
 
 .certificate {
   font-family: var(--font-mono);
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.66);
   margin: 0;
   letter-spacing: 0.02em;
 }

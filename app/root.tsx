@@ -75,6 +75,13 @@ export function links() {
       href: 'https://fonts.gstatic.com',
       crossOrigin: 'anonymous',
     },
+    {
+      rel: 'stylesheet',
+      // Same families/weights as before (Fraunces 500/600, Inter 400-700,
+      // IBM Plex Mono 400/500/600) — only the delivery changes: one <link>
+      // discovered during HTML parse instead of two chained CSS @imports.
+      href: 'https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap',
+    },
     {rel: 'icon', type: 'image/svg+xml', href: favicon},
   ];
 }
@@ -195,11 +202,11 @@ export default function App() {
       <Aside.Provider>
         <div className="app-layout">
           <Header cartCount={data.cart?.lines?.length || 0} />
-          <main className="app-main">
+          <div className="app-main">
             <PageLayout {...data}>
               <Outlet />
             </PageLayout>
-          </main>
+          </div>
           <Footer />
         </div>
       </Aside.Provider>

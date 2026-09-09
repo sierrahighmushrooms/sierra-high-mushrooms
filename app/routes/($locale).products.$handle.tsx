@@ -181,7 +181,7 @@ export default function Product() {
                 marginBottom: 'var(--spacing-lg)',
               }}
             >
-              <a href="/collections/all" style={{color: 'var(--color-sage)'}}>
+              <a href="/collections/all" style={{color: 'var(--color-link)'}}>
                 Shop
               </a>{' '}
               / {product.title}

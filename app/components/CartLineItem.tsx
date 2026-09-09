@@ -34,11 +34,17 @@ export function CartLineItem({
   const lineItemChildren = childrenMap[id];
   const childrenLabelId = `cart-line-children-${id}`;
 
+  // Hide Shopify's placeholder "Title: Default Title" option on single-variant products.
+  const meaningfulOptions = selectedOptions.filter(
+    (option) => option.value && option.value !== 'Default Title',
+  );
+
   return (
     <li key={id} className="cart-line">
       <div className="cart-line-inner">
         {image && (
           <Image
+            className="cart-line-image"
             alt={title}
             aspectRatio="1/1"
             data={image}
@@ -48,8 +54,9 @@ export function CartLineItem({
           />
         )}
 
-        <div>
+        <div className="cart-line-body">
           <Link
+            className="cart-line-title"
             prefetch="intent"
             to={lineItemUrl}
             onClick={() => {
@@ -58,20 +65,22 @@ export function CartLineItem({
               }
             }}
           >
-            <p>
-              <strong>{product.title}</strong>
-            </p>
+            {product.title}
           </Link>
-          <ProductPrice price={line?.cost?.totalAmount} />
-          <ul>
-            {selectedOptions.map((option) => (
-              <li key={option.name}>
-                <small>
-                  {option.name}: {option.value}
-                </small>
-              </li>
-            ))}
-          </ul>
+          {meaningfulOptions.length > 0 && (
+            <ul className="cart-line-options">
+              {meaningfulOptions.map((option) => (
+                <li key={option.name}>
+                  <small>
+                    {option.name}: {option.value}
+                  </small>
+                </li>
+              ))}
+            </ul>
+          )}
+          <div className="cart-line-price">
+            <ProductPrice price={line?.cost?.totalAmount} />
+          </div>
           <CartLineQuantity line={line} />
         </div>
       </div>
@@ -110,29 +119,33 @@ function CartLineQuantity({line}: {line: CartLine}) {
 
   return (
     <div className="cart-line-quantity">
-      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
-      <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
-        <button
-          aria-label="Decrease quantity"
-          disabled={quantity <= 1 || !!isOptimistic}
-          name="decrease-quantity"
-          value={prevQuantity}
-        >
-          <span>&#8722; </span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
-      <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
-        <button
-          aria-label="Increase quantity"
-          name="increase-quantity"
-          value={nextQuantity}
-          disabled={!!isOptimistic}
-        >
-          <span>&#43;</span>
-        </button>
-      </CartLineUpdateButton>
-      &nbsp;
+      <div className="cart-line-stepper" role="group" aria-label="Quantity">
+        <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
+          <button
+            className="cart-line-step"
+            aria-label="Decrease quantity"
+            disabled={quantity <= 1 || !!isOptimistic}
+            name="decrease-quantity"
+            value={prevQuantity}
+          >
+            &#8722;
+          </button>
+        </CartLineUpdateButton>
+        <span className="cart-line-qty-value" aria-live="polite">
+          {quantity}
+        </span>
+        <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
+          <button
+            className="cart-line-step"
+            aria-label="Increase quantity"
+            name="increase-quantity"
+            value={nextQuantity}
+            disabled={!!isOptimistic}
+          >
+            &#43;
+          </button>
+        </CartLineUpdateButton>
+      </div>
       <CartLineRemoveButton lineIds={[lineId]} disabled={!!isOptimistic} />
     </div>
   );
@@ -157,7 +170,7 @@ function CartLineRemoveButton({
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button disabled={disabled} type="submit">
+      <button className="cart-line-remove" disabled={disabled} type="submit">
         Remove
       </button>
     </CartForm>

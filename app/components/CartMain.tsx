@@ -45,7 +45,9 @@ export function CartMain({layout, cart: originalCart}: CartMainProps) {
   const withDiscount =
     cart &&
     Boolean(cart?.discountCodes?.filter((code) => code.applicable)?.length);
-  const className = `cart-main ${withDiscount ? 'with-discount' : ''}`;
+  const className = `cart-main cart-main--${layout} ${
+    withDiscount ? 'with-discount' : ''
+  }`;
   const cartHasItems = cart?.totalQuantity ? cart.totalQuantity > 0 : false;
   const childrenMap = getLineItemChildrenMap(cart?.lines?.nodes ?? []);
 
@@ -94,14 +96,17 @@ function CartEmpty({
 }) {
   const {close} = useAside();
   return (
-    <div hidden={hidden}>
-      <br />
+    <div className="cart-empty" hidden={hidden}>
       <p>
         Looks like you haven&rsquo;t added anything yet, let&rsquo;s get you
         started!
       </p>
-      <br />
-      <Link to="/collections" onClick={close} prefetch="viewport">
+      <Link
+        className="cart-empty-cta"
+        to="/collections"
+        onClick={close}
+        prefetch="viewport"
+      >
         Continue shopping →
       </Link>
     </div>

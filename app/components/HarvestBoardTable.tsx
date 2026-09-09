@@ -15,11 +15,13 @@ export function HarvestBoardTable({
       <table className={styles.table}>
         <thead>
           <tr>
-            <th className={styles.checkboxCell}></th>
+            <th className={styles.checkboxCell}>
+              <span className="sr-only">Select</span>
+            </th>
             <th>Variety</th>
             <th>Status</th>
-            <th>Approx. Weekly</th>
-            <th>Lead Time</th>
+            <th>Approx. weekly</th>
+            <th>Lead time</th>
           </tr>
         </thead>
         <tbody>
@@ -48,8 +50,16 @@ function HarvestRow({
 }) {
   const isAvailable = item.status !== 'soon';
 
-  const handleClick = () => {
+  const toggle = () => {
     if (isAvailable) onToggle(item.id);
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent<HTMLTableRowElement>) => {
+    if (!isAvailable) return;
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      onToggle(item.id);
+    }
   };
 
   return (
@@ -57,22 +67,26 @@ function HarvestRow({
       className={`${styles.row} ${selected ? styles.selected : ''} ${
         !isAvailable ? styles.unavailable : ''
       }`}
-      onClick={handleClick}
-      aria-selected={selected}
+      onClick={toggle}
+      onKeyDown={onKeyDown}
+      role="checkbox"
+      aria-checked={selected}
+      aria-disabled={!isAvailable || undefined}
+      aria-label={`${item.variety}, ${STATUS_LABELS[item.status]}`}
+      tabIndex={isAvailable ? 0 : undefined}
     >
       <td className={`${styles.cell} ${styles.checkboxCell}`}>
-        <div
+        <span
           className={`${styles.checkbox} ${selected ? styles.checked : ''} ${
             !isAvailable ? styles.disabled : ''
           }`}
-          role="checkbox"
-          aria-checked={selected}
-          aria-disabled={!isAvailable}
+          aria-hidden="true"
         >
           {selected && '✓'}
-        </div>
+        </span>
       </td>
-      <td className={styles.cell}>
+      <td className={`${styles.cell} ${styles.varietyCell}`}>
+        <span className={styles.varietyLabel}>Variety</span>
         <span className={styles.variety}>{item.variety}</span>
       </td>
       <td className={`${styles.cell} ${styles.statusCell}`}>
@@ -88,14 +102,16 @@ function HarvestRow({
           />
         </div>
       </td>
-      <td className={styles.cell}>
+      <td className={`${styles.cell} ${styles.metaCell}`}>
+        <span className={styles.metaLabel}>Approx. weekly</span>
         {item.approxWeekly ? (
           <span className={styles.metaText}>{item.approxWeekly}</span>
         ) : (
           <span className={styles.unavailableText}>Not next week</span>
         )}
       </td>
-      <td className={styles.cell}>
+      <td className={`${styles.cell} ${styles.metaCell}`}>
+        <span className={styles.metaLabel}>Lead time</span>
         {item.leadTime ? (
           <span className={styles.metaText}>{item.leadTime}</span>
         ) : (

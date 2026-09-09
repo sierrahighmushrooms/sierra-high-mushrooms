@@ -18,9 +18,13 @@ export function CartSummary({cart, layout}: CartSummaryProps) {
   const giftCardHeadingId = useId();
   const giftCardInputId = useId();
 
+  const Heading = layout === 'page' ? 'h2' : 'p';
+
   return (
     <div aria-labelledby={summaryId} className={className}>
-      <h4 id={summaryId}>Totals</h4>
+      <Heading id={summaryId} className="cart-summary-heading">
+        Order summary
+      </Heading>
       <dl role="group" className="cart-subtotal">
         <dt>Subtotal</dt>
         <dd>
@@ -50,11 +54,10 @@ function CartCheckoutActions({checkoutUrl}: {checkoutUrl?: string}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
-      <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+    <div className="cart-checkout">
+      <a className="cart-checkout-button" href={checkoutUrl} target="_self">
+        Continue to checkout &rarr;
       </a>
-      <br />
     </div>
   );
 }
@@ -97,7 +100,7 @@ function CartDiscounts({
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
+        <div className="cart-code-row">
           <label htmlFor={discountCodeInputId} className="sr-only">
             Discount code
           </label>
@@ -107,8 +110,11 @@ function CartDiscounts({
             name="discountCode"
             placeholder="Discount code"
           />
-          &nbsp;
-          <button type="submit" aria-label="Apply discount code">
+          <button
+            className="cart-code-apply"
+            type="submit"
+            aria-label="Apply discount code"
+          >
             Apply
           </button>
         </div>
@@ -221,7 +227,7 @@ function CartGiftCard({
       )}
 
       <AddGiftCardForm fetcherKey="gift-card-add">
-        <div>
+        <div className="cart-code-row">
           <label htmlFor={giftCardInputId} className="sr-only">
             Gift card code
           </label>
@@ -232,8 +238,8 @@ function CartGiftCard({
             placeholder="Gift card code"
             ref={giftCardCodeInput}
           />
-          &nbsp;
           <button
+            className="cart-code-apply"
             type="submit"
             disabled={giftCardAddFetcher.state !== 'idle'}
             aria-label="Apply gift card code"

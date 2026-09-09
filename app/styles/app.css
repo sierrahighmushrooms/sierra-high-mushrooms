@@ -205,7 +205,7 @@ aside header h2 {
   margin-top: 0;
 }
 
-aside main {
+aside .aside-body {
   margin: 1rem;
 }
 
@@ -383,33 +383,239 @@ button.reset:hover:not(:has(> *)) {
 * components/Cart
 * --------------------------------------------------
 */
-.cart-main {
+
+/* The drawer keeps its own scroll region; the full page scrolls with the
+   document (no nested scroll trap). */
+.cart-main--aside {
   height: 100%;
   max-height: calc(100vh - var(--cart-aside-summary-height));
   overflow-y: auto;
   width: auto;
 }
 
-.cart-main.with-discount {
+.cart-main--aside.with-discount {
   max-height: calc(100vh - var(--cart-aside-summary-height-with-discount));
 }
 
+.cart-main--page {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Empty state */
+.cart-empty {
+  padding: var(--spacing-2xl) 0 var(--spacing-4xl);
+}
+
+.cart-empty p {
+  font-size: 15.5px;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.cart-empty-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 var(--spacing-lg);
+  border: 1px solid var(--color-forest-deep);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-forest-deep);
+}
+
+.cart-empty-cta:hover {
+  background: var(--color-forest-deep);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+/* Page layout: items + summary */
+.cart {
+  padding-bottom: var(--spacing-2xl);
+}
+
+.cart .cart-details {
+  display: grid;
+  gap: var(--spacing-2xl);
+}
+
+@media (min-width: 900px) {
+  .cart .cart-details {
+    grid-template-columns: 1fr 21rem;
+    gap: var(--spacing-3xl);
+    align-items: start;
+  }
+
+  .cart .cart-summary-page {
+    position: sticky;
+    top: 6rem;
+  }
+}
+
+/* Line items */
 .cart-line {
-  padding: 0.75rem 0;
+  padding: var(--spacing-lg) 0;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.cart-line:first-child {
+  border-top: 1px solid var(--color-line);
 }
 
 .cart-line-inner {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: var(--spacing-md);
+  align-items: start;
+}
+
+.cart-line-image {
+  width: 84px;
+  height: 84px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: var(--color-bg);
+}
+
+.cart-line-body {
+  min-width: 0;
   display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.cart-line img {
-  height: 100%;
-  display: block;
-  margin-right: 0.75rem;
+.cart-line-title {
+  font-family: var(--font-serif);
+  font-size: 15.5px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--color-forest-deep);
 }
 
+.cart-line-title:hover {
+  color: var(--color-forest);
+  text-decoration: none;
+}
+
+.cart-line-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cart-line-options small {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.cart-line-price {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.cart-line-quantity {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  margin-top: 4px;
+}
+
+.cart-line-stepper {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--color-line);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cart-line-stepper form {
+  display: flex;
+  max-width: none;
+}
+
+.cart-line-step {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: var(--color-forest-deep);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.cart-line-step:hover:not(:disabled) {
+  background: var(--color-bg);
+}
+
+.cart-line-step:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.cart-line-qty-value {
+  min-width: 2.25rem;
+  padding: 0 2px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-forest-deep);
+}
+
+.cart-line-remove {
+  min-height: 40px;
+  padding: 0 4px;
+  background: none;
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.cart-line-remove:hover:not(:disabled) {
+  color: var(--color-limited);
+}
+
+/* Child line components (warranties, gift wrapping, etc.) */
+.cart-line-children {
+  padding-left: var(--spacing-lg);
+}
+
+/* Summary */
 .cart-summary-page {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 8px;
+  padding: var(--spacing-lg);
+}
+
+.cart-summary-heading {
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: var(--spacing-xs);
 }
 
 .cart-summary-aside {
@@ -421,30 +627,148 @@ button.reset:hover:not(:has(> *)) {
   width: calc(var(--aside-width) - 40px);
 }
 
-.cart-line-quantity {
+.cart-subtotal {
+  align-items: baseline;
   display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-sm);
+  border-top: 1px solid var(--color-line);
+  font-size: 14px;
 }
 
-/* Child line components (warranties, gift wrapping, etc.) */
-.cart-line-children {
-  padding-left: 2rem;
+.cart-subtotal dd {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--color-forest-deep);
+}
+
+/* The skeleton wraps discount/gift-card blocks in <section>, which reset.css
+   pads. Inside the summary we control the rhythm ourselves. */
+.cart-summary-page section,
+.cart-summary-aside section {
+  padding: 0;
+}
+
+.cart-code-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.cart-code-row input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding-block: 0;
+}
+
+.cart-code-apply {
+  flex-shrink: 0;
+  height: 46px;
+  padding: 0 var(--spacing-md);
+  border: 1px solid var(--color-forest-deep);
+  border-radius: 3px;
+  background: transparent;
+  color: var(--color-forest-deep);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cart-code-apply:hover:not(:disabled) {
+  background: var(--color-forest-deep);
+  color: var(--color-bg);
+}
+
+.cart-code-apply:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .cart-discount {
   align-items: center;
   display: flex;
-  margin-top: 0.25rem;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  font-size: 13px;
 }
 
-.cart-subtotal {
-  align-items: center;
+.cart-checkout {
+  margin-top: var(--spacing-xs);
+}
+
+.cart-checkout-button {
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 var(--spacing-lg);
+  border-radius: 3px;
+  background: var(--color-forest-deep);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.cart-checkout-button:hover {
+  background: var(--color-forest);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+/* The drawer summary stays compact */
+.cart-summary-aside .cart-summary-heading {
+  font-size: 15px;
+  margin-bottom: var(--spacing-sm);
+}
+
+.cart-summary-aside .cart-checkout-button {
+  min-height: 46px;
 }
 /*
 * --------------------------------------------------
 * components/Search
 * --------------------------------------------------
 */
+.search-page-form {
+  display: flex;
+  gap: var(--spacing-sm);
+  max-width: 32rem;
+  margin: var(--spacing-lg) 0 var(--spacing-2xl);
+}
+
+.search-page-form input {
+  flex: 1;
+  min-width: 0;
+  height: 46px;
+  padding-block: 0;
+}
+
+.search-page-form button {
+  flex-shrink: 0;
+  min-height: 46px;
+  padding: 0 var(--spacing-lg);
+  border-radius: 3px;
+  background: var(--color-forest-deep);
+  color: var(--color-bg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.search-page-form button:hover {
+  background: var(--color-forest);
+}
+
 .predictive-search {
   height: calc(100vh - var(--header-height) - 40px);
   overflow-y: auto;

@@ -15,7 +15,7 @@
 }
 
 .breadcrumb a {
-  color: var(--color-sage);
+  color: var(--color-link);
 }
 
 .breadcrumb a:hover {
