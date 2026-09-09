@@ -1,7 +1,5 @@
 :root {
   --aside-width: 400px;
-  --cart-aside-summary-height-with-discount: 300px;
-  --cart-aside-summary-height: 250px;
   --grid-item-width: 355px;
   --header-height: 64px;
   --color-dark: #000;
@@ -162,18 +160,26 @@ img {
 aside {
   background: var(--color-light);
   box-shadow: 0 0 50px rgba(0, 0, 0, 0.3);
+  /* Constrain to the *usable* viewport. 100vh on iOS is the toolbar-retracted
+     height, so the bottom of the panel hides behind the browser chrome;
+     100dvh tracks the visible area. vh stays as the fallback for old engines. */
   height: 100vh;
+  height: 100dvh;
   width: min(var(--aside-width), 100vw);
   position: fixed;
   right: calc(-1 * var(--aside-width));
   top: 0;
   transition: transform 200ms ease-in-out;
+  /* Header pinned, body scrolls — see .aside-body. */
+  display: flex;
+  flex-direction: column;
 }
 
 aside header {
   align-items: center;
   border-bottom: 1px solid var(--color-dark);
   display: flex;
+  flex-shrink: 0;
   height: var(--header-height);
   justify-content: space-between;
   padding: 0 12px 0 20px;
@@ -205,8 +211,17 @@ aside header h2 {
   margin-top: 0;
 }
 
+/* The single scroll owner inside every drawer. flex:1 + min-height:0 lets it
+   shrink below its content so overflow-y can take over; overscroll-behavior
+   keeps the swipe from chaining to the locked page behind it. */
 aside .aside-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   margin: 1rem;
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 aside p {
@@ -384,17 +399,13 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 
-/* The drawer keeps its own scroll region; the full page scrolls with the
-   document (no nested scroll trap). */
+/* Inside the drawer the cart is plain flow content — the one scroll region is
+   .aside-body. On the /cart route the whole page scrolls with the document. */
 .cart-main--aside {
-  height: 100%;
-  max-height: calc(100vh - var(--cart-aside-summary-height));
-  overflow-y: auto;
+  height: auto;
+  max-height: none;
+  overflow: visible;
   width: auto;
-}
-
-.cart-main--aside.with-discount {
-  max-height: calc(100vh - var(--cart-aside-summary-height-with-discount));
 }
 
 .cart-main--page {
@@ -625,10 +636,8 @@ button.reset:hover:not(:has(> *)) {
 .cart-summary-aside {
   background: white;
   border-top: 1px solid var(--color-dark);
-  bottom: 0;
   padding-top: 0.75rem;
-  position: absolute;
-  width: calc(var(--aside-width) - 40px);
+  padding-bottom: calc(var(--spacing-md) + env(safe-area-inset-bottom));
 }
 
 .cart-subtotal {
