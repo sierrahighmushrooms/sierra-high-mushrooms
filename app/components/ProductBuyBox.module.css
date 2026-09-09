@@ -151,8 +151,8 @@
 }
 
 .quantityButton {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: transparent;
   color: var(--color-forest-deep);
@@ -169,8 +169,8 @@
 }
 
 .quantityInput {
-  width: 50px;
-  height: 40px;
+  width: 52px;
+  height: 44px;
   border: none;
   border-left: 1px solid var(--color-line);
   border-right: 1px solid var(--color-line);

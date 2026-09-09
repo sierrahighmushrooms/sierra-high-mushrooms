@@ -401,9 +401,30 @@
 
 /* ============ RESPONSIVE ============ */
 @media (max-width: 860px) {
+  .hero {
+    padding-top: 64px;
+  }
+
   .heroGrid {
     grid-template-columns: 1fr;
-    gap: 40px;
+    gap: 32px;
+    padding-bottom: 44px;
+  }
+
+  .photoBand {
+    margin-top: 40px;
+  }
+
+  .paths {
+    padding: 48px 0;
+  }
+
+  .sectionHead {
+    margin-bottom: 32px;
+  }
+
+  .products {
+    padding-bottom: 56px;
   }
 
   .pathGrid {
@@ -421,11 +442,48 @@
 
 @media (max-width: 560px) {
   .hero {
-    padding-top: 56px;
+    padding-top: 40px;
+  }
+
+  .heroHeading {
+    font-size: 30px;
+    line-height: 1.12;
+    margin-top: 16px;
+  }
+
+  .heroSub {
+    margin-top: 20px;
+  }
+
+  .heroCtas {
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 48px;
+  }
+
+  .productsHead {
+    margin-bottom: 24px;
   }
 
   .productGrid {
     grid-template-columns: 1fr;
+  }
+
+  .farm {
+    height: 400px;
+  }
+
+  .farmContent {
+    padding: 32px 0;
   }
 }
 

@@ -91,12 +91,12 @@
 
 @media (max-width: 900px) {
   .section {
-    padding: var(--spacing-3xl) var(--spacing-xl);
+    padding: var(--spacing-3xl) var(--spacing-lg);
   }
 
   .container {
     grid-template-columns: 1fr;
-    gap: var(--spacing-3xl);
+    gap: var(--spacing-2xl);
   }
 }
 

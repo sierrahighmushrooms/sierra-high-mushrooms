@@ -54,6 +54,9 @@
 }
 
 .filterButton {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 500;

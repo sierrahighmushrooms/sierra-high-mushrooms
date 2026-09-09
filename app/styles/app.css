@@ -50,6 +50,45 @@ img {
 
 /*
 * --------------------------------------------------
+* Pagination / load-more control
+* --------------------------------------------------
+*/
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin: var(--spacing-xl) 0;
+}
+
+.pagination:empty {
+  display: none;
+}
+
+.pagination-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 24px;
+  border: 1px solid var(--color-forest-deep);
+  border-radius: 3px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-forest-deep);
+  text-decoration: none;
+  transition: var(--transition-standard);
+}
+
+.pagination-link:hover {
+  background-color: var(--color-forest-deep);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+/*
+* --------------------------------------------------
 * Non anchor links
 * --------------------------------------------------
 */
@@ -137,7 +176,7 @@ aside header {
   display: flex;
   height: var(--header-height);
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 12px 0 20px;
 }
 
 aside header h3 {
@@ -145,11 +184,16 @@ aside header h3 {
 }
 
 aside header .close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  font-size: 1.5rem;
   font-weight: bold;
   opacity: 0.8;
   text-decoration: none;
   transition: all 200ms;
-  width: 20px;
 }
 
 aside header .close:hover {

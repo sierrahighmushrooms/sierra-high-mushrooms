@@ -1,6 +1,4 @@
-import {useState} from 'react';
 import {Money} from '@shopify/hydrogen';
-import {Button} from './Button';
 import {AddToCartButton} from './AddToCartButton';
 import type {ProductFragment} from 'storefrontapi.generated';
 import styles from './ProductBuyBox.module.css';
@@ -8,31 +6,31 @@ import styles from './ProductBuyBox.module.css';
 interface ProductBuyBoxProps {
   product: ProductFragment;
   selectedVariant: ProductFragment['selectedOrFirstAvailableVariant'];
+  quantity: number;
+  onQuantityChange: (quantity: number) => void;
   onAddToCart?: () => void;
+  /** Marks the primary Add-to-Cart control for the mobile sticky bar. */
+  atcRef?: React.RefObject<HTMLDivElement>;
 }
 
 export function ProductBuyBox({
   product,
   selectedVariant,
+  quantity,
+  onQuantityChange,
   onAddToCart,
+  atcRef,
 }: ProductBuyBoxProps) {
-  const [quantity, setQuantity] = useState(1);
-
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity > 0 && newQuantity < 100) {
-      setQuantity(newQuantity);
+      onQuantityChange(newQuantity);
     }
   };
 
   const isOutOfStock = !selectedVariant?.availableForSale;
 
   const cartLines = selectedVariant
-    ? [
-        {
-          merchandiseId: selectedVariant.id,
-          quantity: quantity,
-        },
-      ]
+    ? [{merchandiseId: selectedVariant.id, quantity}]
     : [];
 
   return (
@@ -102,14 +100,16 @@ export function ProductBuyBox({
         </div>
       </div>
 
-      <AddToCartButton
-        disabled={isOutOfStock}
-        onClick={onAddToCart}
-        lines={cartLines}
-        className={styles.addToCartButton}
-      >
-        {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
-      </AddToCartButton>
+      <div ref={atcRef}>
+        <AddToCartButton
+          disabled={isOutOfStock}
+          onClick={onAddToCart}
+          lines={cartLines}
+          className={styles.addToCartButton}
+        >
+          {isOutOfStock ? 'Sold Out' : 'Add to Cart'}
+        </AddToCartButton>
+      </div>
 
       <div className={styles.trustSection}>
         <div className={styles.trustItem}>

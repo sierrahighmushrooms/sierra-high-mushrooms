@@ -1,3 +1,4 @@
+import {useRef, useState} from 'react';
 import {redirect, useLoaderData} from 'react-router';
 import type {Route} from './+types/products.$handle';
 import {
@@ -10,6 +11,7 @@ import {
 } from '@shopify/hydrogen';
 import {ProductGallery} from '~/components/ProductGallery';
 import {ProductBuyBox} from '~/components/ProductBuyBox';
+import {ProductMobileStickyATC} from '~/components/ProductMobileStickyATC';
 import {ProductDetailTabs, NumberedList, SpecTable} from '~/components/ProductDetailTabs';
 import {ProductRelated} from '~/components/ProductRelated';
 import {useAside} from '~/components/Aside';
@@ -79,6 +81,11 @@ export default function Product() {
   );
 
   useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
+
+  // Quantity is owned here so the buy box and the mobile sticky bar add the
+  // same amount through the same AddToCartButton.
+  const [quantity, setQuantity] = useState(1);
+  const primaryAtcRef = useRef<HTMLDivElement>(null);
 
   const productImages = product.images?.nodes || [];
 
@@ -161,8 +168,8 @@ export default function Product() {
 
   return (
     <>
-      <div className="wrap">
-        <div style={{padding: 'var(--spacing-3xl) 0'}}>
+      <div className="wrap product-page">
+        <div className="product-page-inner">
           <div style={{marginBottom: 'var(--spacing-lg)'}}>
             <div
               style={{
@@ -200,7 +207,10 @@ export default function Product() {
             <ProductBuyBox
               product={product}
               selectedVariant={selectedVariant}
+              quantity={quantity}
+              onQuantityChange={setQuantity}
               onAddToCart={() => open('cart')}
+              atcRef={primaryAtcRef}
             />
           </div>
 
@@ -209,6 +219,14 @@ export default function Product() {
           {relatedProducts.length > 0 && <ProductRelated products={relatedProducts} />}
         </div>
       </div>
+
+      <ProductMobileStickyATC
+        product={product}
+        selectedVariant={selectedVariant}
+        quantity={quantity}
+        primaryRef={primaryAtcRef}
+        onAddToCart={() => open('cart')}
+      />
 
       <Analytics.ProductView
         data={{
@@ -227,10 +245,20 @@ export default function Product() {
       />
 
       <style>{`
+        .product-page-inner {
+          padding: var(--spacing-3xl) 0;
+        }
         @media (max-width: 900px) {
           .product-detail-grid {
             grid-template-columns: 1fr !important;
             gap: var(--spacing-2xl) !important;
+          }
+          .product-page-inner {
+            padding-top: var(--spacing-2xl);
+          }
+          /* Room to scroll clear of the mobile sticky Add-to-Cart bar */
+          .product-page {
+            padding-bottom: calc(var(--spacing-4xl) + env(safe-area-inset-bottom));
           }
         }
       `}</style>
