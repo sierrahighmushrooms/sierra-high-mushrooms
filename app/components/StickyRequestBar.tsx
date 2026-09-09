@@ -53,6 +53,7 @@ export function StickyRequestBar({
             type="button"
             className={styles.clearButton}
             onClick={onClear}
+            tabIndex={visible ? 0 : -1}
           >
             Clear
           </button>
@@ -60,6 +61,7 @@ export function StickyRequestBar({
             type="button"
             className={styles.requestButton}
             onClick={onRequest}
+            tabIndex={visible ? 0 : -1}
           >
             Request these &rarr;
           </button>

@@ -546,8 +546,10 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .cart-line-step {
-  width: 40px;
-  height: 40px;
+  /* 44x44 minimum touch target; the glyph size is unchanged so the
+     control looks the same, just with more breathing room. */
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -577,7 +579,9 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .cart-line-remove {
-  min-height: 40px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   padding: 0 4px;
   background: none;
   color: var(--color-muted);
