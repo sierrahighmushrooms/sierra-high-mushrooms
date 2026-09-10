@@ -68,14 +68,13 @@
 
 .ctas {
   display: flex;
-  gap: var(--spacing-xs);
   margin-left: auto;
   align-items: center;
   flex-shrink: 0;
 }
 
-.iconButton,
 .cartButton {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,17 +84,19 @@
   color: var(--color-ink);
   text-decoration: none;
   transition: var(--transition-standard);
-  font-size: 18px;
   cursor: pointer;
   flex-shrink: 0;
 }
 
-.cartButton {
-  position: relative;
+.cartIcon {
+  display: block;
+  width: 21px;
+  height: 21px;
+  stroke: currentColor;
 }
 
-.iconButton:hover,
-.cartButton:hover {
+.cartButton:hover,
+.cartButton:focus-visible {
   background-color: var(--color-line);
   color: var(--color-forest-deep);
 }
@@ -155,11 +156,6 @@
     display: flex;
   }
 
-  .ctas {
-    gap: var(--spacing-lg);
-  }
-
-  .iconButton,
   .cartButton {
     width: 40px;
     height: 40px;
