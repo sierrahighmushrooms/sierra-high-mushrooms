@@ -69,8 +69,16 @@ export const AvailabilityInquiry = forwardRef<
                 ) : (
                   <div className={styles.chipsList}>
                     {selectedItems.map((item) => (
-                      <span key={item.id} className={styles.chip}>
+                      <span
+                        key={item.id}
+                        className={`${styles.chip} ${
+                          item.seasonal ? styles.chipSeasonal : ''
+                        }`}
+                      >
                         {item.variety}
+                        {item.seasonal && (
+                          <span className={styles.chipTag}>seasonal</span>
+                        )}
                         <button
                           type="button"
                           className={styles.chipRemove}

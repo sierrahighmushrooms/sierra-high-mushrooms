@@ -1,39 +1,21 @@
 import {Link} from 'react-router';
 import styles from './AvailabilityHeader.module.css';
 
-interface AvailabilityHeaderProps {
-  updatedLabel: string;
-  nextUpdateLabel: string;
-  orderCutoffLabel: string;
-}
-
-export function AvailabilityHeader({
-  updatedLabel,
-  nextUpdateLabel,
-  orderCutoffLabel,
-}: AvailabilityHeaderProps) {
+export function AvailabilityHeader() {
   return (
     <div className={styles.header}>
       <div className="wrap">
         <div className={styles.breadcrumb}>
-          <Link to="/">For Restaurants</Link> / Current Availability
+          <Link to="/">For Restaurants</Link> / Plan Your Harvest
         </div>
 
-        <h1 className={styles.title}>What&rsquo;s ready this week.</h1>
+        <h1 className={styles.title}>Plan Your Harvest</h1>
 
         <p className={styles.lede}>
-          Availability shifts week to week based on what&rsquo;s actually
-          flushing. This board reflects what we can fill right now &mdash;
-          not a catalog of everything we could theoretically grow.
+          Choose the mushrooms your kitchen wants to work with and tell us the
+          volume and frequency you need. We plan production around customer
+          demand, with lead times based on each strain&rsquo;s growing cycle.
         </p>
-
-        <div className={styles.statusStamp}>
-          <span className={styles.pulsingDot} aria-hidden="true" />
-          <span>
-            Updated {updatedLabel} &middot; Next update {nextUpdateLabel}{' '}
-            &middot; Orders close {orderCutoffLabel}
-          </span>
-        </div>
       </div>
     </div>
   );

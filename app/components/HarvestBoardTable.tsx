@@ -1,4 +1,9 @@
-import {HARVEST_BOARD, STATUS_LABELS, type HarvestItem} from '~/lib/harvest-data';
+import {
+  HARVEST_BOARD,
+  PROGRAM_LABELS,
+  type HarvestItem,
+  type HarvestProgram,
+} from '~/lib/harvest-data';
 import styles from './HarvestBoardTable.module.css';
 
 interface HarvestBoardTableProps {
@@ -6,35 +11,55 @@ interface HarvestBoardTableProps {
   onToggle: (id: string) => void;
 }
 
+const PROGRAM_CLASS: Record<HarvestProgram, string> = {
+  regular: 'programRegular',
+  'grown-to-order': 'programGrownToOrder',
+  'special-order': 'programSpecial',
+  seasonal: 'programSeasonal',
+};
+
 export function HarvestBoardTable({
   selectedIds,
   onToggle,
 }: HarvestBoardTableProps) {
   return (
-    <div className={styles.tableWrap}>
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th className={styles.checkboxCell}>
-              <span className="sr-only">Select</span>
-            </th>
-            <th>Variety</th>
-            <th>Status</th>
-            <th>Approx. weekly</th>
-            <th>Lead time</th>
-          </tr>
-        </thead>
-        <tbody>
-          {HARVEST_BOARD.map((item) => (
-            <HarvestRow
-              key={item.id}
-              item={item}
-              selected={selectedIds.has(item.id)}
-              onToggle={onToggle}
-            />
-          ))}
-        </tbody>
-      </table>
+    <div>
+      <h2 className={styles.boardHeading}>Mushrooms We Grow</h2>
+      <p className={styles.boardIntro}>
+        Select one or more strains to include them in your harvest request.
+      </p>
+
+      <div className={styles.tableWrap}>
+        <table className={styles.table} aria-label="Mushrooms we grow">
+          <thead>
+            <tr>
+              <th className={styles.checkboxCell}>
+                <span className="sr-only">Select</span>
+              </th>
+              <th>Strain</th>
+              <th>Program</th>
+              <th>Approx. Weekly</th>
+              <th>Lead Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {HARVEST_BOARD.map((item) => (
+              <HarvestRow
+                key={item.id}
+                item={item}
+                selected={selectedIds.has(item.id)}
+                onToggle={onToggle}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <p className={styles.boardNote}>
+        Lead time is estimated from grain inoculation to first harvest. Actual
+        timing varies by strain, order size, growing conditions, and current
+        production schedule.
+      </p>
     </div>
   );
 }
@@ -48,75 +73,64 @@ function HarvestRow({
   selected: boolean;
   onToggle: (id: string) => void;
 }) {
-  const isAvailable = item.status !== 'soon';
-
-  const toggle = () => {
-    if (isAvailable) onToggle(item.id);
-  };
+  const toggle = () => onToggle(item.id);
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLTableRowElement>) => {
-    if (!isAvailable) return;
     if (event.key === ' ' || event.key === 'Enter') {
       event.preventDefault();
       onToggle(item.id);
     }
   };
 
+  const programLabel = PROGRAM_LABELS[item.program];
+
   return (
     <tr
       className={`${styles.row} ${selected ? styles.selected : ''} ${
-        !isAvailable ? styles.unavailable : ''
+        item.seasonal ? styles.seasonalRow : ''
       }`}
       onClick={toggle}
       onKeyDown={onKeyDown}
       role="checkbox"
       aria-checked={selected}
-      aria-disabled={!isAvailable || undefined}
-      aria-label={`${item.variety}, ${STATUS_LABELS[item.status]}`}
-      tabIndex={isAvailable ? 0 : undefined}
+      aria-label={`${item.variety}, ${programLabel}${
+        item.seasonal ? ', seasonal outdoor crop' : ''
+      }`}
+      tabIndex={0}
     >
       <td className={`${styles.cell} ${styles.checkboxCell}`}>
         <span
-          className={`${styles.checkbox} ${selected ? styles.checked : ''} ${
-            !isAvailable ? styles.disabled : ''
-          }`}
+          className={`${styles.checkbox} ${selected ? styles.checked : ''}`}
           aria-hidden="true"
         >
           {selected && '✓'}
         </span>
       </td>
-      <td className={`${styles.cell} ${styles.varietyCell}`}>
-        <span className={styles.varietyLabel}>Variety</span>
-        <span className={styles.variety}>{item.variety}</span>
+      <td className={`${styles.cell} ${styles.strainCell}`}>
+        <span className={styles.strainLabel}>Strain</span>
+        <span className={styles.strain}>{item.variety}</span>
+        {item.seasonal && (
+          <span className={styles.seasonalNote}>Outdoor · seasonal crop</span>
+        )}
       </td>
-      <td className={`${styles.cell} ${styles.statusCell}`}>
-        <div className={styles.statusLabel}>
-          <span className={`${styles.statusText} ${styles[item.status]}`}>
-            {STATUS_LABELS[item.status]}
-          </span>
-        </div>
-        <div className={styles.statusBar}>
-          <div
-            className={`${styles.statusBarFill} ${styles[item.status]}`}
-            style={{width: `${item.fillPercent}%`}}
-          />
-        </div>
+      <td className={`${styles.cell} ${styles.programCell}`}>
+        <span
+          className={`${styles.programBadge} ${
+            styles[PROGRAM_CLASS[item.program]]
+          }`}
+        >
+          {programLabel}
+        </span>
       </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>
         <span className={styles.metaLabel}>Approx. weekly</span>
-        {item.approxWeekly ? (
-          <span className={styles.metaText}>{item.approxWeekly}</span>
-        ) : (
-          <span className={styles.unavailableText}>Not next week</span>
-        )}
+        <span className={styles.metaText}>
+          {item.approxWeekly ?? 'By Request'}
+        </span>
       </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>
         <span className={styles.metaLabel}>Lead time</span>
-        {item.leadTime ? (
-          <span className={styles.metaText}>{item.leadTime}</span>
-        ) : (
-          <span className={styles.unavailableText}>&mdash;</span>
-        )}
+        <span className={styles.metaText}>{item.leadTime}</span>
       </td>
     </tr>
   );

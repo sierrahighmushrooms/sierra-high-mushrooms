@@ -99,6 +99,22 @@
   font-weight: 500;
 }
 
+.chipSeasonal {
+  border-color: rgba(106, 104, 87, 0.4);
+}
+
+.chipTag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-soon);
+  background-color: rgba(106, 104, 87, 0.12);
+  padding: 2px 5px;
+  border-radius: 2px;
+}
+
 .chipRemove {
   background: none;
   border: none;

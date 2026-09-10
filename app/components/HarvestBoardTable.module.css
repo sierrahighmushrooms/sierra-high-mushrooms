@@ -1,3 +1,21 @@
+.boardHeading {
+  margin-bottom: var(--spacing-xs);
+}
+
+.boardIntro {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-lg);
+}
+
+.boardNote {
+  max-width: 640px;
+  margin-top: var(--spacing-lg);
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--color-muted);
+}
+
 .tableWrap {
   overflow-x: auto;
 }
@@ -33,14 +51,6 @@
   background-color: rgba(63, 107, 47, 0.1);
 }
 
-.row.unavailable {
-  cursor: default;
-}
-
-.row.unavailable:hover {
-  background-color: transparent;
-}
-
 .cell {
   padding: var(--spacing-lg);
   vertical-align: middle;
@@ -69,76 +79,74 @@
   color: var(--color-bg);
 }
 
-.checkbox.disabled {
-  opacity: 0.3;
-}
-
-.varietyLabel,
+/* Field labels are shown only in the phone card layout. */
+.strainLabel,
 .metaLabel {
   display: none;
 }
 
-.variety {
+.strainCell {
+  min-width: 200px;
+}
+
+.strain {
   font-family: var(--font-serif);
   font-size: 15px;
   font-weight: 500;
   color: var(--color-forest-deep);
 }
 
-.statusCell {
-  min-width: 140px;
-}
-
-.statusLabel {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  margin-bottom: 6px;
-}
-
-.statusText {
+.seasonalNote {
+  display: block;
+  margin-top: 3px;
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 600;
+  text-transform: uppercase;
   letter-spacing: 0.06em;
-}
-
-.statusText.peak {
-  color: var(--color-peak);
-}
-
-.statusText.limited {
-  color: var(--color-limited);
-}
-
-.statusText.soon {
   color: var(--color-soon);
 }
 
-.statusBar {
-  width: 100px;
-  height: 5px;
+.programCell {
+  min-width: 150px;
+}
+
+/* Program badges — restrained, one shape, differentiated by hue. */
+.programBadge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 3px 8px;
   border-radius: 3px;
-  background-color: var(--color-line);
-  overflow: hidden;
+  border: 1px solid transparent;
+  white-space: nowrap;
 }
 
-.statusBarFill {
-  height: 100%;
-  border-radius: 3px;
-  transition: width 0.3s ease;
+.programRegular {
+  color: var(--color-peak);
+  background-color: rgba(63, 107, 47, 0.1);
+  border-color: rgba(63, 107, 47, 0.22);
 }
 
-.statusBarFill.peak {
-  background-color: var(--color-peak);
+.programGrownToOrder {
+  color: var(--color-forest);
+  background-color: rgba(108, 123, 87, 0.14);
+  border-color: rgba(108, 123, 87, 0.3);
 }
 
-.statusBarFill.limited {
-  background-color: var(--color-limited);
+.programSpecial {
+  color: var(--color-limited);
+  background-color: rgba(166, 116, 31, 0.1);
+  border-color: rgba(166, 116, 31, 0.25);
 }
 
-.statusBarFill.soon {
-  background-color: var(--color-soon);
+.programSeasonal {
+  color: var(--color-soon);
+  background-color: rgba(106, 104, 87, 0.12);
+  border-color: rgba(106, 104, 87, 0.28);
 }
 
 .metaText {
@@ -146,17 +154,16 @@
   color: var(--color-muted);
 }
 
-.unavailableText {
-  font-size: 13px;
-  color: var(--color-soon);
-  font-style: italic;
-}
-
 /* ---- Tablet keeps a compact table ---- */
 @media (max-width: 900px) and (min-width: 621px) {
   .cell,
   .table thead th {
     padding: var(--spacing-md);
+  }
+
+  .strainCell,
+  .programCell {
+    min-width: 0;
   }
 }
 
@@ -180,8 +187,8 @@
     display: grid;
     grid-template-columns: 24px 1fr;
     grid-template-areas:
-      'check variety'
-      'check status'
+      'check strain'
+      'check program'
       'meta1 meta1'
       'meta2 meta2';
     column-gap: var(--spacing-md);
@@ -197,6 +204,10 @@
     margin-bottom: 0;
   }
 
+  .table tr.row.selected {
+    border-color: var(--color-forest-deep);
+  }
+
   .table td.cell {
     display: block;
     padding: 0;
@@ -209,18 +220,14 @@
     padding-top: 2px;
   }
 
-  .table td.varietyCell {
-    grid-area: variety;
-  }
-
-  .table td.statusCell {
-    grid-area: status;
+  .table td.strainCell {
+    grid-area: strain;
     min-width: 0;
   }
 
-  .statusBar {
-    width: 100%;
-    max-width: 220px;
+  .table td.programCell {
+    grid-area: program;
+    min-width: 0;
   }
 
   .table td.metaCell {
@@ -238,6 +245,10 @@
 
   .table td.metaCell:nth-of-type(5) {
     grid-area: meta2;
+  }
+
+  .strainLabel {
+    display: none;
   }
 
   .metaLabel {

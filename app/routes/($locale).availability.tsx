@@ -10,11 +10,11 @@ import {renderRows, sendNotificationEmail} from '~/lib/send-email';
 
 export const meta: Route.MetaFunction = () => {
   return [
-    {title: 'Current Availability | Sierra High Mushrooms'},
+    {title: 'Plan Your Harvest | Sierra High Mushrooms'},
     {
       name: 'description',
       content:
-        "See what's ready to harvest this week and request it for your kitchen.",
+        'Choose the mushrooms your kitchen wants to work with and tell us the volume and frequency you need. We plan production around customer demand.',
     },
   ];
 };
@@ -116,18 +116,11 @@ export default function Availability() {
 
   return (
     <>
-      <AvailabilityHeader
-        updatedLabel="Monday, Aug 24"
-        nextUpdateLabel="Monday"
-        orderCutoffLabel="Thursday 4pm for Friday delivery"
-      />
+      <AvailabilityHeader />
 
       <div className="wrap">
         <div className="section-padding">
-          <HarvestBoardTable
-            selectedIds={selectedIds}
-            onToggle={toggleItem}
-          />
+          <HarvestBoardTable selectedIds={selectedIds} onToggle={toggleItem} />
         </div>
       </div>
 
