@@ -48,7 +48,7 @@ export const AvailabilityInquiry = forwardRef<
             <div className={styles.successMessage}>
               <h3>Request sent</h3>
               <p>
-                We&rsquo;ll reply with real availability and pricing &mdash;
+                We&rsquo;ll reply with production timing and pricing &mdash;
                 usually the same day.
               </p>
             </div>
@@ -122,26 +122,47 @@ export const AvailabilityInquiry = forwardRef<
                 </div>
               </div>
 
-              <div className={styles.formRow}>
-                <div className={styles.field}>
-                  <label htmlFor="city">City</label>
-                  <select id="city" name="city" required defaultValue="">
-                    <option value="" disabled>
-                      Select a city
+              <div className={styles.field}>
+                <label htmlFor="city">City</label>
+                <select id="city" name="city" required defaultValue="">
+                  <option value="" disabled>
+                    Select a city
+                  </option>
+                  {CITY_OPTIONS.map((city) => (
+                    <option key={city} value={city}>
+                      {city}
                     </option>
-                    {CITY_OPTIONS.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  ))}
+                </select>
+              </div>
+
+              <div className={styles.formRow}>
                 <div className={styles.field}>
                   <label htmlFor="weekly-volume">
                     Rough weekly volume{' '}
                     <span className="optional">(optional)</span>
                   </label>
                   <input id="weekly-volume" name="weeklyVolume" type="text" />
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="frequency">
+                    Frequency <span className="optional">(optional)</span>
+                  </label>
+                  <select id="frequency" name="frequency" defaultValue="">
+                    <option value="" disabled>
+                      Select frequency
+                    </option>
+                    <option value="One-time order">One-time order</option>
+                    <option value="Weekly standing order">
+                      Weekly standing order
+                    </option>
+                    <option value="Every 2 weeks">Every 2 weeks</option>
+                    <option value="Monthly">Monthly</option>
+                    <option value="On demand / as needed">
+                      On demand / as needed
+                    </option>
+                    <option value="Not sure yet">Not sure yet</option>
+                  </select>
                 </div>
               </div>
 
@@ -169,7 +190,7 @@ export const AvailabilityInquiry = forwardRef<
               </Button>
 
               <p className={styles.formFooter}>
-                We&rsquo;ll reply with real availability and pricing &mdash;
+                We&rsquo;ll reply with production timing and pricing &mdash;
                 usually the same day.
               </p>
             </fetcher.Form>

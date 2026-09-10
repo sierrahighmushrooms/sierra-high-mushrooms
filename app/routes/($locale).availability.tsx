@@ -40,6 +40,7 @@ export async function action({
   const phone = String(form.get('phone') || '').trim();
   const city = String(form.get('city') || '').trim();
   const weeklyVolume = String(form.get('weeklyVolume') || '').trim();
+  const frequency = String(form.get('frequency') || '').trim();
   const notes = String(form.get('notes') || '').trim();
   const interestedIn = String(form.get('interestedIn') || '').trim();
 
@@ -57,6 +58,7 @@ export async function action({
     ['Phone', phone || '—'],
     ['City', city],
     ['Weekly volume', weeklyVolume || '—'],
+    ['Frequency', frequency || '—'],
     ['Interested in', interestedIn || '—'],
     ['Notes', notes || '—'],
   ];
