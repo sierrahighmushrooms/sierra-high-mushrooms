@@ -55,14 +55,14 @@ export function Footer() {
             </p>
           </div>
           <div className={styles.social}>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+            <a href="https://www.instagram.com/sierrahighmushrooms/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
               Instagram
             </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-              Facebook
+            <a href="https://www.tiktok.com/@sierrahighmushrooms/" target="_blank" rel="noopener noreferrer" aria-label="TikTok">
+              TikTok
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-              Twitter
+            <a href="https://www.facebook.com/people/Sierra-High-Mushrooms/61591580947654/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              Facebook
             </a>
           </div>
         </div>
