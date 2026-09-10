@@ -1,9 +1,4 @@
-import {
-  HARVEST_BOARD,
-  PROGRAM_LABELS,
-  type HarvestItem,
-  type HarvestProgram,
-} from '~/lib/harvest-data';
+import {HARVEST_BOARD, type HarvestItem} from '~/lib/harvest-data';
 import styles from './HarvestBoardTable.module.css';
 
 interface HarvestBoardTableProps {
@@ -11,17 +6,20 @@ interface HarvestBoardTableProps {
   onToggle: (id: string) => void;
 }
 
-const PROGRAM_CLASS: Record<HarvestProgram, string> = {
-  'grown-to-order': 'programGrownToOrder',
-};
-
 export function HarvestBoardTable({
   selectedIds,
   onToggle,
 }: HarvestBoardTableProps) {
   return (
     <div>
-      <h2 className={styles.boardHeading}>Mushrooms We Grow</h2>
+      <div className={styles.boardHeader}>
+        <span
+          className={`${styles.programBadge} ${styles.programGrownToOrder}`}
+        >
+          Grown to Order
+        </span>
+        <h2 className={styles.boardHeading}>Mushrooms We Grow</h2>
+      </div>
       <p className={styles.boardIntro}>
         Select one or more strains to include them in your harvest request.
       </p>
@@ -34,8 +32,7 @@ export function HarvestBoardTable({
                 <span className="sr-only">Select</span>
               </th>
               <th>Strain</th>
-              <th>Program</th>
-              <th>Approx. Weekly</th>
+              <th>Weekly Capacity</th>
               <th>Lead Time</th>
             </tr>
           </thead>
@@ -79,8 +76,6 @@ function HarvestRow({
     }
   };
 
-  const programLabel = PROGRAM_LABELS[item.program];
-
   return (
     <tr
       className={`${styles.row} ${selected ? styles.selected : ''}`}
@@ -88,9 +83,11 @@ function HarvestRow({
       onKeyDown={onKeyDown}
       role="checkbox"
       aria-checked={selected}
-      aria-label={`${item.variety}, ${programLabel}${
-        item.seasonal ? ', seasonal outdoor crop' : ''
-      }`}
+      aria-label={
+        item.seasonal
+          ? `${item.variety}, seasonal outdoor crop`
+          : item.variety
+      }
       tabIndex={0}
     >
       <td className={`${styles.cell} ${styles.checkboxCell}`}>
@@ -108,17 +105,8 @@ function HarvestRow({
           <span className={styles.seasonalNote}>Seasonal outdoor crop</span>
         )}
       </td>
-      <td className={`${styles.cell} ${styles.programCell}`}>
-        <span
-          className={`${styles.programBadge} ${
-            styles[PROGRAM_CLASS[item.program]]
-          }`}
-        >
-          {programLabel}
-        </span>
-      </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>
-        <span className={styles.metaLabel}>Approx. weekly</span>
+        <span className={styles.metaLabel}>Weekly Capacity</span>
         <span className={styles.metaText}>{item.approxWeekly}</span>
       </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>

@@ -1,5 +1,13 @@
-.boardHeading {
+.boardHeader {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
   margin-bottom: var(--spacing-xs);
+}
+
+.boardHeading {
+  margin-bottom: 0;
 }
 
 .boardIntro {
@@ -107,10 +115,6 @@
   color: var(--color-soon);
 }
 
-.programCell {
-  min-width: 150px;
-}
-
 /* Program badge — one program state: the primary, positive "grown to order".
    Deep-green text on a soft forest-green tint with a subtle green border. */
 .programBadge {
@@ -144,8 +148,7 @@
     padding: var(--spacing-md);
   }
 
-  .strainCell,
-  .programCell {
+  .strainCell {
     min-width: 0;
   }
 }
@@ -171,7 +174,6 @@
     grid-template-columns: 24px 1fr;
     grid-template-areas:
       'check strain'
-      'check program'
       'meta1 meta1'
       'meta2 meta2';
     column-gap: var(--spacing-md);
@@ -208,11 +210,6 @@
     min-width: 0;
   }
 
-  .table td.programCell {
-    grid-area: program;
-    min-width: 0;
-  }
-
   .table td.metaCell {
     display: flex;
     justify-content: space-between;
@@ -220,13 +217,13 @@
     font-size: 13px;
   }
 
-  .table td.metaCell:nth-of-type(4) {
+  .table td.metaCell:nth-of-type(3) {
     grid-area: meta1;
     padding-top: var(--spacing-sm);
     border-top: 1px solid var(--color-line);
   }
 
-  .table td.metaCell:nth-of-type(5) {
+  .table td.metaCell:nth-of-type(4) {
     grid-area: meta2;
   }
 
