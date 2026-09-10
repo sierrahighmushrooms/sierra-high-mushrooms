@@ -266,13 +266,14 @@ function FarmTrustSection() {
       </div>
       <div className={styles.farmContent}>
         <div className="wrap">
-          <h2>A farm you could actually visit.</h2>
+          <h2>Fresh Mushrooms, Grown to Order</h2>
           <p>
-            Every mushroom we sell fresh starts here, in Sparks — not shipped
-            in from somewhere else and relabeled.
+            We plan our grows around demand, not inventory, so you get fresher
+            specialty mushrooms, predictable harvests, and a direct line to the
+            people growing your food.
           </p>
           <Link to="/availability" className={styles.btnLight}>
-            Request wholesale availability
+            Request a Harvest
           </Link>
         </div>
       </div>
