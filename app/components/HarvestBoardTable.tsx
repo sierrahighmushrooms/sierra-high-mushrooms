@@ -12,10 +12,7 @@ interface HarvestBoardTableProps {
 }
 
 const PROGRAM_CLASS: Record<HarvestProgram, string> = {
-  regular: 'programRegular',
   'grown-to-order': 'programGrownToOrder',
-  'special-order': 'programSpecial',
-  seasonal: 'programSeasonal',
 };
 
 export function HarvestBoardTable({
@@ -86,9 +83,7 @@ function HarvestRow({
 
   return (
     <tr
-      className={`${styles.row} ${selected ? styles.selected : ''} ${
-        item.seasonal ? styles.seasonalRow : ''
-      }`}
+      className={`${styles.row} ${selected ? styles.selected : ''}`}
       onClick={toggle}
       onKeyDown={onKeyDown}
       role="checkbox"
@@ -110,7 +105,7 @@ function HarvestRow({
         <span className={styles.strainLabel}>Strain</span>
         <span className={styles.strain}>{item.variety}</span>
         {item.seasonal && (
-          <span className={styles.seasonalNote}>Outdoor · seasonal crop</span>
+          <span className={styles.seasonalNote}>Seasonal outdoor crop</span>
         )}
       </td>
       <td className={`${styles.cell} ${styles.programCell}`}>
@@ -124,9 +119,7 @@ function HarvestRow({
       </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>
         <span className={styles.metaLabel}>Approx. weekly</span>
-        <span className={styles.metaText}>
-          {item.approxWeekly ?? 'By Request'}
-        </span>
+        <span className={styles.metaText}>{item.approxWeekly}</span>
       </td>
       <td className={`${styles.cell} ${styles.metaCell}`}>
         <span className={styles.metaLabel}>Lead time</span>

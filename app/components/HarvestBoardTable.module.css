@@ -111,7 +111,8 @@
   min-width: 150px;
 }
 
-/* Program badges — restrained, one shape, differentiated by hue. */
+/* Program badge — one program state: the primary, positive "grown to order".
+   Deep-green text on a soft forest-green tint with a subtle green border. */
 .programBadge {
   display: inline-block;
   font-family: var(--font-mono);
@@ -125,28 +126,10 @@
   white-space: nowrap;
 }
 
-.programRegular {
-  color: var(--color-peak);
-  background-color: rgba(63, 107, 47, 0.1);
-  border-color: rgba(63, 107, 47, 0.22);
-}
-
 .programGrownToOrder {
   color: var(--color-forest);
-  background-color: rgba(108, 123, 87, 0.14);
-  border-color: rgba(108, 123, 87, 0.3);
-}
-
-.programSpecial {
-  color: var(--color-limited);
-  background-color: rgba(166, 116, 31, 0.1);
-  border-color: rgba(166, 116, 31, 0.25);
-}
-
-.programSeasonal {
-  color: var(--color-soon);
-  background-color: rgba(106, 104, 87, 0.12);
-  border-color: rgba(106, 104, 87, 0.28);
+  background-color: rgba(63, 107, 47, 0.14);
+  border-color: rgba(63, 107, 47, 0.35);
 }
 
 .metaText {
