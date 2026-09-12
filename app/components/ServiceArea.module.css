@@ -1,0 +1,221 @@
+/* Shared visual system for /service-areas and its city pages. Body copy is
+   written independently per route — only layout/typography is shared here. */
+
+.header {
+  padding-block: var(--spacing-4xl) var(--spacing-3xl);
+  border-bottom: 1px solid var(--color-line);
+}
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-xl);
+  text-transform: uppercase;
+}
+
+.breadcrumb a {
+  color: var(--color-link);
+}
+
+.title {
+  max-width: 760px;
+}
+
+.lede {
+  margin-top: var(--spacing-lg);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--color-muted);
+  max-width: 640px;
+}
+
+.ctaRow {
+  margin-top: var(--spacing-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 var(--spacing-xl);
+  border-radius: 3px;
+  background-color: var(--color-forest-deep);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: var(--transition-standard);
+}
+
+.cta:hover {
+  background-color: var(--color-forest);
+  color: var(--color-bg);
+  text-decoration: none;
+}
+
+.ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 var(--spacing-xl);
+  border-radius: 3px;
+  border: 1px solid var(--color-line);
+  color: var(--color-forest-deep);
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: var(--transition-standard);
+}
+
+.ctaSecondary:hover {
+  border-color: var(--color-forest-deep);
+  text-decoration: none;
+}
+
+/* ---- Article body ---- */
+.section {
+  max-width: 720px;
+}
+
+.section h2 {
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-sm);
+}
+
+.section h2:first-child {
+  margin-top: 0;
+}
+
+.section p {
+  margin-bottom: var(--spacing-md);
+}
+
+.pointList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0 var(--spacing-lg);
+}
+
+.point {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  font-size: 14.5px;
+  color: var(--color-ink);
+  line-height: 1.6;
+}
+
+.pointIcon {
+  color: var(--color-peak);
+  font-size: 15px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* ---- Grown-to-order callout ---- */
+.callout {
+  margin-top: var(--spacing-2xl);
+  background: var(--color-panel);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: var(--spacing-xl);
+}
+
+.calloutTitle {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-sm);
+}
+
+.calloutBody {
+  font-size: 14.5px;
+  line-height: 1.65;
+  color: var(--color-ink);
+  margin-bottom: var(--spacing-lg);
+}
+
+/* ---- Hub: market card grid ---- */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-2xl);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: var(--spacing-lg);
+  background: var(--color-panel);
+  transition: var(--transition-standard);
+}
+
+.card:hover {
+  border-color: var(--color-forest-deep);
+}
+
+.cardTitle {
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 500;
+  color: var(--color-forest-deep);
+  margin-bottom: 6px;
+}
+
+.cardCopy {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-muted);
+  margin-bottom: var(--spacing-md);
+  flex-grow: 1;
+}
+
+.cardLink {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-link);
+}
+
+@media (max-width: 900px) {
+  .header {
+    padding-block: var(--spacing-3xl) var(--spacing-2xl);
+  }
+
+  .cardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 560px) {
+  .header {
+    padding-block: var(--spacing-2xl) var(--spacing-xl);
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta,
+  .ctaSecondary {
+    width: 100%;
+    justify-content: center;
+  }
+}

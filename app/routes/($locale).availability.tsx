@@ -1,5 +1,5 @@
 import {useState, useRef, useCallback} from 'react';
-import {data} from 'react-router';
+import {data, Link} from 'react-router';
 import type {Route} from './+types/availability';
 import {AvailabilityHeader} from '~/components/AvailabilityHeader';
 import {HarvestBoardTable} from '~/components/HarvestBoardTable';
@@ -121,6 +121,16 @@ export default function Availability() {
       <AvailabilityHeader />
 
       <div className="wrap">
+        <p
+          style={{
+            fontSize: '13px',
+            color: 'var(--color-muted)',
+            marginTop: 'var(--spacing-lg)',
+          }}
+        >
+          Serving Reno, Sparks, Carson City, Truckee and Lake Tahoe &mdash;
+          see <Link to="/service-areas">delivery details by area</Link>.
+        </p>
         <div className="section-padding">
           <HarvestBoardTable selectedIds={selectedIds} onToggle={toggleItem} />
         </div>

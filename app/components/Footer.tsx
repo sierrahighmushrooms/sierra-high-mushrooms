@@ -9,6 +9,7 @@ export function Footer() {
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
       { label: 'For Restaurants', href: '/availability' },
+      { label: 'Service Areas', href: '/service-areas' },
     ],
     Shop: [
       { label: 'Grow Kits', href: '/collections/grow-kits' },

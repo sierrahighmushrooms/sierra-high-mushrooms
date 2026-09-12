@@ -16,10 +16,14 @@ export function loader({request}: Route.LoaderArgs) {
 
 function robotsTxtData({url}: {url?: string}) {
   const sitemapUrl = url ? `${url}/sitemap.xml` : undefined;
+  // Hydrogen's built-in sitemap only indexes Shopify resources (products,
+  // collections, pages, articles, blogs). Custom app routes such as
+  // /service-areas/* are listed in a small supplementary sitemap instead.
+  const pagesSitemapUrl = url ? `${url}/sitemap-pages.xml` : undefined;
 
   return `
 User-agent: *
-${generalDisallowRules({sitemapUrl})}
+${generalDisallowRules({sitemapUrl, pagesSitemapUrl})}
 
 # Google adsbot ignores robots.txt unless specifically named!
 User-agent: adsbot-google
@@ -34,11 +38,11 @@ Disallow: /
 
 User-agent: AhrefsBot
 Crawl-delay: 10
-${generalDisallowRules({sitemapUrl})}
+${generalDisallowRules({sitemapUrl, pagesSitemapUrl})}
 
 User-agent: AhrefsSiteAudit
 Crawl-delay: 10
-${generalDisallowRules({sitemapUrl})}
+${generalDisallowRules({sitemapUrl, pagesSitemapUrl})}
 
 User-agent: MJ12bot
 Crawl-Delay: 10
@@ -52,7 +56,13 @@ Crawl-delay: 1
  * This function generates disallow rules that generally follow what Shopify's
  * Online Store has as defaults for their robots.txt
  */
-function generalDisallowRules({sitemapUrl}: {sitemapUrl?: string}) {
+function generalDisallowRules({
+  sitemapUrl,
+  pagesSitemapUrl,
+}: {
+  sitemapUrl?: string;
+  pagesSitemapUrl?: string;
+}) {
   return `Disallow: /cart
 Disallow: /account
 Disallow: /collections/*sort_by*
@@ -74,5 +84,6 @@ Disallow: /policies/
 Disallow: /search
 Allow: /search/
 Disallow: /search/?*
-${sitemapUrl ? `Sitemap: ${sitemapUrl}` : ''}`;
+${sitemapUrl ? `Sitemap: ${sitemapUrl}` : ''}
+${pagesSitemapUrl ? `Sitemap: ${pagesSitemapUrl}` : ''}`;
 }

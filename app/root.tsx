@@ -176,6 +176,39 @@ export function Layout({children}: {children?: React.ReactNode}) {
         <link rel="stylesheet" href={globalsStyles}></link>
         <Meta />
         <Links />
+        <script
+          type="application/ld+json"
+          nonce={nonce}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'LocalBusiness',
+              '@id': 'https://sierrahighmushrooms.com/#business',
+              name: 'Sierra High Mushrooms',
+              url: 'https://sierrahighmushrooms.com',
+              description:
+                'Specialty gourmet and medicinal mushroom farm in Sparks, Nevada, growing fresh mushrooms to order for restaurants, chefs, and home growers across the Reno-Sparks region.',
+              address: {
+                '@type': 'PostalAddress',
+                addressLocality: 'Sparks',
+                addressRegion: 'NV',
+                addressCountry: 'US',
+              },
+              areaServed: [
+                {'@type': 'City', name: 'Reno, NV'},
+                {'@type': 'City', name: 'Sparks, NV'},
+                {'@type': 'City', name: 'Carson City, NV'},
+                {'@type': 'City', name: 'Truckee, CA'},
+                {'@type': 'Place', name: 'Lake Tahoe Basin'},
+              ],
+              sameAs: [
+                'https://www.instagram.com/sierrahighmushrooms/',
+                'https://www.tiktok.com/@sierrahighmushrooms/',
+                'https://www.facebook.com/people/Sierra-High-Mushrooms/61591580947654/',
+              ],
+            }),
+          }}
+        />
       </head>
       <body>
         {children}
