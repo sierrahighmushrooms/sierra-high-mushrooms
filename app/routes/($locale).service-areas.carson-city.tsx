@@ -1,6 +1,6 @@
 import {Link} from 'react-router';
 import {useNonce} from '@shopify/hydrogen';
-import type {Route} from './+types/service-areas.carson-city';
+import type {Route} from './+types/($locale).service-areas.carson-city';
 import styles from '~/components/ServiceArea.module.css';
 
 export const meta: Route.MetaFunction = () => {
@@ -9,7 +9,7 @@ export const meta: Route.MetaFunction = () => {
     {
       name: 'description',
       content:
-        'Grown-to-order gourmet mushrooms delivered to Carson City, year-round — not just farmers-market season. Plan your harvest with Sierra High Mushrooms.',
+        'Grown-to-order gourmet mushrooms delivered to Carson City on a planned, year-round schedule. Plan your harvest with Sierra High Mushrooms.',
     },
     {rel: 'canonical', href: '/service-areas/carson-city'},
   ];
@@ -32,8 +32,7 @@ export default function ServiceAreaCarsonCity() {
           <p className={styles.lede}>
             We run a regional delivery route from our Sparks farm down into
             Carson City for restaurants that want specialty mushrooms on a
-            planned, recurring basis &mdash; not just during farmers-market
-            season.
+            planned, recurring basis, all year round.
           </p>
           <div className={styles.ctaRow}>
             <Link to="/availability" className={styles.cta}>
@@ -47,13 +46,11 @@ export default function ServiceAreaCarsonCity() {
         <div className={styles.section}>
           <h2>Fresh mushrooms, every week of the year</h2>
           <p>
-            Some of the best gourmet mushrooms in the Carson City area come
-            from small local growers selling at the farmers market, which
-            typically runs summer through early fall. That leaves a real gap
-            the rest of the year for restaurants that still want specialty
-            strains on the menu. Our production isn&rsquo;t tied to a market
-            calendar, so we can supply Carson City kitchens on the same
-            planned schedule in January as in July.
+            We grow every strain in climate-controlled rooms on our Sparks
+            farm, so production isn&rsquo;t tied to an outdoor growing
+            season. Carson City kitchens can plan the same specialty strains
+            into a menu in January as in July, on the same predictable
+            schedule.
           </p>
 
           <h2>How grown-to-order works</h2>
@@ -77,10 +74,10 @@ export default function ServiceAreaCarsonCity() {
         </div>
 
         <div className={styles.callout}>
-          <div className={styles.calloutTitle}>Skip the market-season wait</div>
+          <div className={styles.calloutTitle}>Plan Year-Round Mushroom Supply</div>
           <p className={styles.calloutBody}>
-            No need to wait for market season &mdash; tell us what your
-            kitchen needs and we&rsquo;ll plan around it.
+            Tell us what your kitchen needs and we&rsquo;ll build it into our
+            year-round production schedule.
           </p>
           <Link to="/availability" className={styles.cta}>
             Plan Your Carson City Harvest &rarr;

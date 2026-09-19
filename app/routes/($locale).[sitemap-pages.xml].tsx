@@ -1,4 +1,4 @@
-import type {Route} from './+types/[sitemap-pages.xml]';
+import type {Route} from './+types/($locale).[sitemap-pages.xml]';
 
 /**
  * Supplementary sitemap for custom app routes that Hydrogen's built-in

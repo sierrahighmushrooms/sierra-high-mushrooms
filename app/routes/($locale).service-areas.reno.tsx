@@ -1,6 +1,6 @@
 import {Link} from 'react-router';
 import {useNonce} from '@shopify/hydrogen';
-import type {Route} from './+types/service-areas.reno';
+import type {Route} from './+types/($locale).service-areas.reno';
 import styles from '~/components/ServiceArea.module.css';
 
 export const meta: Route.MetaFunction = () => {
