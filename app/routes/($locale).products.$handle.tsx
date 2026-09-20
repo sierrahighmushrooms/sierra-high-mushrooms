@@ -23,11 +23,20 @@ type ProductLoaderData = {
 };
 
 export const meta: Route.MetaFunction = ({data}) => {
+  const product = data?.product;
+
+  // Prefer the merchant-set SEO title/description from Shopify Admin (Product >
+  // Search engine listing). Fall back to the plain product title/description
+  // when a product hasn't had SEO fields set.
+  const title = product?.seo?.title || `${product?.title ?? ''} | Sierra High Mushrooms`;
+  const description = product?.seo?.description || product?.description || undefined;
+
   return [
-    {title: `${data?.product.title ?? ''} | Sierra High Mushrooms`},
+    {title},
+    ...(description ? [{name: 'description', content: description}] : []),
     {
       rel: 'canonical',
-      href: `/products/${data?.product.handle}`,
+      href: `/products/${product?.handle}`,
     },
   ];
 };
