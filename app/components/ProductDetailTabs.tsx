@@ -16,7 +16,7 @@ export function ProductDetailTabs({tabs}: ProductDetailTabsProps) {
 
   return (
     <section className={styles.section}>
-      <div className={styles.tabBar}>
+      <div className={styles.tabBar} role="tablist">
         {tabs.map((tab, index) => (
           <button
             key={index}
