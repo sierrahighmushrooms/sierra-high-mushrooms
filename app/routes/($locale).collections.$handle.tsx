@@ -7,6 +7,8 @@ import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ProductItem} from '~/components/ProductItem';
 import {CollectionHeader} from '~/components/CollectionHeader';
 import {CollectionSEOSection} from '~/components/CollectionSEOSection';
+import {ProduceRequest} from '~/components/ProduceRequest';
+import {PRODUCE_COLLECTION_HANDLE} from '~/lib/produce-data';
 import type {ProductItemFragment} from 'storefrontapi.generated';
 
 export const meta: Route.MetaFunction = ({data}) => {
@@ -109,6 +111,9 @@ export default function Collection() {
   const [activeFilter, setActiveFilter] = useState('all');
 
   const contentData = COLLECTION_CONTENT.default;
+  const isProduce = collection.handle === PRODUCE_COLLECTION_HANDLE;
+  const showProductGrid =
+    !isProduce || collection.products.nodes.length > 0;
 
   // Filter products based on active filter (client-side)
   const filterProductsByTag = (
@@ -147,33 +152,40 @@ export default function Collection() {
         activeFilter={activeFilter}
         onFilterChange={setActiveFilter}
         productCount={filteredProducts.length}
+        showFilters={!isProduce}
       />
 
-      <div className="wrap">
-        <div className="section-padding">
-          <PaginatedResourceSection<ProductItemFragment>
-            connection={collection.products}
-            resourcesClassName="grid-3"
-          >
-            {({node: product, index}) => {
-              if (!visibleProductIds.has(product.id)) return null;
-              return (
-                <ProductItem
-                  key={product.id}
-                  product={product}
-                  loading={index < 3 ? 'eager' : undefined}
-                />
-              );
-            }}
-          </PaginatedResourceSection>
+      {showProductGrid && (
+        <div className="wrap">
+          <div className="section-padding">
+            <PaginatedResourceSection<ProductItemFragment>
+              connection={collection.products}
+              resourcesClassName="grid-3"
+            >
+              {({node: product, index}) => {
+                if (!visibleProductIds.has(product.id)) return null;
+                return (
+                  <ProductItem
+                    key={product.id}
+                    product={product}
+                    loading={index < 3 ? 'eager' : undefined}
+                  />
+                );
+              }}
+            </PaginatedResourceSection>
+          </div>
         </div>
-      </div>
+      )}
 
-      <CollectionSEOSection
-        title="Everything You Need to Grow"
-        content={contentData.contentParagraphs}
-        faqs={contentData.faqs}
-      />
+      {isProduce ? (
+        <ProduceRequest />
+      ) : (
+        <CollectionSEOSection
+          title="Everything You Need to Grow"
+          content={contentData.contentParagraphs}
+          faqs={contentData.faqs}
+        />
+      )}
 
       <Analytics.CollectionView
         data={{

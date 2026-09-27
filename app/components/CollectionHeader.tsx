@@ -7,6 +7,7 @@ interface CollectionHeaderProps {
   activeFilter?: string;
   onFilterChange: (filter: string) => void;
   productCount: number;
+  showFilters?: boolean;
 }
 
 const FILTER_OPTIONS = [
@@ -22,6 +23,7 @@ export function CollectionHeader({
   activeFilter = 'all',
   onFilterChange,
   productCount,
+  showFilters = true,
 }: CollectionHeaderProps) {
   return (
     <div className={styles.header}>
@@ -34,25 +36,29 @@ export function CollectionHeader({
 
         {description && <p className={styles.description}>{description}</p>}
 
-        <div className={styles.filterBar}>
-          <span className={styles.filterLabel}>Filter:</span>
-          {FILTER_OPTIONS.map((option) => (
-            <button
-              key={option.id}
-              className={`${styles.filterButton} ${
-                activeFilter === option.id ? styles.active : ''
-              }`}
-              onClick={() => onFilterChange(option.id)}
-              aria-pressed={activeFilter === option.id}
-            >
-              {option.label}
-            </button>
-          ))}
-        </div>
+        {showFilters && (
+          <>
+            <div className={styles.filterBar}>
+              <span className={styles.filterLabel}>Filter:</span>
+              {FILTER_OPTIONS.map((option) => (
+                <button
+                  key={option.id}
+                  className={`${styles.filterButton} ${
+                    activeFilter === option.id ? styles.active : ''
+                  }`}
+                  onClick={() => onFilterChange(option.id)}
+                  aria-pressed={activeFilter === option.id}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
 
-        <div className={styles.productCount}>
-          {productCount} product{productCount !== 1 ? 's' : ''}
-        </div>
+            <div className={styles.productCount}>
+              {productCount} product{productCount !== 1 ? 's' : ''}
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
